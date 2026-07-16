@@ -1,0 +1,325 @@
+{
+	"Metadata":
+	{
+		"Name": "Music Cues Customization",
+		"Author": "mrgrassman14",
+		"Description": "Enables extra customization for the music tracks that play during certain Acts, events, and bosses.",
+		"ModVersion": "2.22",
+		//"GameVersion": "23.03.25.1"
+	},
+	"Settings":
+	{
+		"Events":
+		[
+			{
+				"InternalName": "MCC_AIZ1Fire_music_int",
+				"DisplayName": "Angel Island Zone Act 1 (Fire)",
+				"Variable": "MCC_AIZ1Fire_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "0",
+				"Category": "Zones",
+				"Options":
+				{
+					"0": "Angel Island Zone Act 1",
+					"1": "Angel Island Zone Act 2",
+				}
+			},
+			{
+				"InternalName": "MCC_CNZ2Dark_music_int",
+				"DisplayName": "CNZ2 Lights Out (Prototype)",
+				"Variable": "MCC_CNZ2Dark_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "2",
+				"Category": "Zones",
+				"Options":
+				{
+					"0": "No Change",
+					"1": "Act 1 (Final)",
+					"2": "Act 2 (Final)",
+				}
+			},
+			{
+				"InternalName": "MCC_HPZ_music_int",
+				"DisplayName": "Hidden Palace Zone",
+				"Variable": "MCC_HPZ_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "0",
+				"Category": "Zones",
+				"Options":
+				{
+					"0": "Default",
+					"1": "Sky Sanctuary Zone",
+					"2": "Death Egg Zone Act 2",
+				}
+			},
+			{
+				"InternalName": "MCC_HPZShrine_music_int",
+				"DisplayName": "Hidden Palace Shrine",
+				"Variable": "MCC_HPZShrine_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "0",
+				"Category": "Zones",
+				"Options":
+				{
+					"0": "Default",
+					"1": "Sky Sanctuary Zone",
+					"2": "Death Egg Zone Act 2",
+				}
+			},
+			{
+				"InternalName": "MCC_ResumeAct2_music_int",
+				"DisplayName": "During Zone Transitions",
+				"Variable": "MCC_ResumeAct2_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "2",
+				"Category": "Events",
+				"Options":
+				{
+					"0": "Resume Zone Music",
+					"1": "Don't Resume Zone Music",
+					"2": "Pick by Zone",
+				}
+			},
+			{
+				"InternalName": "MCC_AIZ1Knux_music_int",
+				"DisplayName": "Knuckles' Intro Cutscene",
+				"Variable": "MCC_AIZ1Knux_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "3",
+				"Category": "Events",
+				"Options":
+				{
+					"0": "Knuckles' Theme (S&K)",
+					"1": "Knuckles' Theme (S3)",
+					"2": "Knuckles' Theme (Proto)",
+					"3": "Angel Island Zone Act 1",
+				}
+			},
+			{
+				"InternalName": "MCC_SOZ1boss_music_int",
+				"DisplayName": "After Defeating SOZ1 Boss",
+				"Variable": "MCC_SOZ1boss_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "1",
+				"Category": "Events",
+				"Options":
+				{
+					"0": "Continue Boss Music",
+					"1": "Restart Zone Music",
+				}
+			},
+			{
+				"InternalName": "MCC_LRZ2boss_music_int",
+				"DisplayName": "After Defeating LRZ2 Boss",
+				"Variable": "MCC_LRZ2boss_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "0",
+				"Category": "Events",
+				"Options":
+				{
+					"0": "Restart Zone Music",
+					"1": "Continue Boss Music",
+				}
+			},
+			{
+				"InternalName": "MCC_HCZ1boss_music_int",
+				"DisplayName": "Hydrocity 1 Boss",
+				"Variable": "MCC_HCZ1boss_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "0",
+				"Category": "Bosses",
+				"Options":
+				{
+					"0": "Act 1 Boss (Menu Choice)",
+					"1": "Act 2 Boss",
+				}
+			},
+			{
+				"InternalName": "MCC_MGZ2Knux_music_int",
+				"DisplayName": "Knuckles' MGZ2 Boss",
+				"Variable": "MCC_MGZ2Knux_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "0",
+				"Category": "Bosses",
+				"Options":
+				{
+					"0": "Act 2 Boss",
+					"1": "Act 1 Boss (S&K)",
+					"2": "Act 1 Boss (S3)",
+				}
+			},
+			{
+				"InternalName": "MCC_FBZLaserTrap_music_int",
+				"DisplayName": "FBZ2 Laser Trap",
+				"Variable": "MCC_FBZLaserTrap_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "1",
+				"Category": "Bosses",
+				"Options":
+				{
+					"0": "Menu Option",
+					"1": "Force S&K Miniboss",
+					"2": "Force S3 Miniboss",
+				}
+			},
+			{
+				"InternalName": "MCC_KnucklesHPZ_ContinueBossMusic_int",
+				"DisplayName": "Knuckles (Hidden Palace)",
+				"Variable": "MCC_KnucklesHPZ_ContinueBossMusic",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "0",
+				"Category": "Bosses",
+				"Options":
+				{
+					"0": "Stop After Defeat",
+					"1": "Continue to Zone End",
+				}
+			},
+			{
+				"InternalName": "MCC_SSZThrowback_BossMusic_int",
+				"DisplayName": "SSZ Bosses (Normal Music)",
+				"Variable": "MCC_SSZThrowback_BossMusic",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "0",
+				"Category": "Bosses",
+				"Options":
+				{
+					"0": "Act 2 Boss",
+					"1": "Act 1 Boss (S&K)",
+					"2": "Act 1 Boss (S3)",
+				}
+			},
+			{
+				"InternalName": "MCC_LBZ2cutscene_music_int",
+				"DisplayName": "After Big Arm Defeat",
+				"Variable": "MCC_LBZ2cutscene_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "1",
+				"Category": "Launch Base 2 Big Arm -Sonic-",
+				"Options":
+				{
+					"0": "Act Results Jingle",
+					"1": "Continue Boss Music",
+					"2": "Game Clear Jingle (S3)",
+					"3": "Game Clear Jingle (S&K)",
+				}
+			},
+			{
+				"InternalName": "MCC_LBZ2cutscene_postmusic_int",
+				"DisplayName": "After Results/Clear Jingle",
+				"Variable": "MCC_LBZ2cutscene_postmusic",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "1",
+				"Category": "Launch Base 2 Big Arm -Sonic-",
+				"Options":
+				{
+					"0": "Restart Zone Music",
+					"1": "Don't Play Music",
+					"2": "Credits (S3 Final)",
+					"3": "Credits (S3 Proto)",
+					"4": "Restart Boss Music",
+				}
+			},
+			{
+				"InternalName": "MCC_SonicOutro_music_int",
+				"DisplayName": "(Sonic/Tails) Ending",
+				"Variable": "MCC_SonicOutro_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "3",
+				"Category": "Outro",
+				"Options":
+				{
+					"0": "Sky Sanctuary Zone",
+					"1": "Ending Music (Final)",
+					"2": "Ending Music (Proto)",
+					"3": "Menu Option",
+				}
+			},
+			{
+				"InternalName": "MCC_SonicCredits_music_int",
+				"DisplayName": "(Sonic/Tails) Credits",
+				"Variable": "MCC_SonicCredits_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "4",
+				"Category": "Outro",
+				"Options":
+				{
+					"0": "Sky Sanctuary Zone",
+					"1": "Ending Music (Final)",
+					"2": "Ending Music (Proto)",
+					"3": "Continue Outro Music",
+					"4": "Zone Medley",
+				}
+			},
+			{
+				"InternalName": "MCC_KnucklesOutro_music_int",
+				"DisplayName": "(Knuckles) Ending",
+				"Variable": "MCC_KnucklesOutro_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "3",
+				"Category": "Outro",
+				"Options":
+				{
+					"0": "Sky Sanctuary Zone",
+					"1": "Ending Music (Final)",
+					"2": "Ending Music (Proto)",
+					"3": "Menu Option",
+				}
+			},
+			{
+				"InternalName": "MCC_KnucklesCredits_music_int",
+				"DisplayName": "(Knuckles) Credits",
+				"Variable": "MCC_KnucklesCredits_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "4",
+				"Category": "Outro",
+				"Options":
+				{
+					"0": "Sky Sanctuary Zone",
+					"1": "Ending Music (Final)",
+					"2": "Ending Music (Proto)",
+					"3": "Continue Outro Music",
+					"4": "Zone Medley",
+				}
+			},
+			{
+				"InternalName": "MCC_Continue_music_int",
+				"DisplayName": "Continue Screen",
+				"Variable": "MCC_Continue_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "0",
+				"Category": "Menus",
+				"Options":
+				{
+					"0": "Menu Option",
+					"1": "Sonic & Knuckles (Slower)",
+					"2": "Sonic 3 (Faster)",
+					"3": "Pick by Zone",
+				}
+			},
+			{
+				"InternalName": "MCC_CompResults_music_int",
+				"DisplayName": "Competition Results",
+				"Variable": "MCC_CompResults_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "0",
+				"Category": "Menus",
+				"Options":
+				{
+					"0": "Menu Option",
+					"1": "Sonic & Knuckles (Slower)",
+					"2": "Sonic 3 (Faster)",
+					"3": "Act Results Jingle",
+					"4": "Unused Theme",
+				}
+			},
+			{
+				"InternalName": "MCC_NoWay_music_int",
+				"DisplayName": "Blue Sphere Title Screen",
+				"Variable": "MCC_NoWay_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "0",
+				"Category": "Menus",
+				"Options":
+				{
+					"0": "Menu Option",
+					"1": "Sonic & Knuckles (Slower)",
+					"2": "Sonic 3 (Faster)",
+				}
+			},
+			{
+				"InternalName": "MCC_BlueSphereResults_music_int",
+				"DisplayName": "Blue Sphere Difficulty Screen",
+				"Variable": "MCC_BlueSphereResults_music",	// This must be the name of a global variable in the scripts (not a define!)
+				"DefaultValue": "2",
+				"Category": "Menus",
+				"Options":
+				{
+					"0": "Invincibility (S&K)",
+					"1": "Invincibility (S3)",
+					"2": "Unused Theme",
+					"3": "Gachapon/Gumball Bonus",
+					"4": "Super Theme (Sonic 2)",
+				}
+			},
+		]
+	}
+}

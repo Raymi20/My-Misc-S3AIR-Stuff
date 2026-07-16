@@ -1,0 +1,15 @@
+{
+    "character_sonic_0xba_behind": {"File": "atras_sonic_parado.bmp", "Rect": "66,0,24,40", "Center": "8,18"},
+    "character_sonic_0xba_behind_1": {"File": "atras_sonic_parado.bmp", "Rect": "0,0,28,40", "Center": "14,18"},
+    "character_sonic_0xba_behind_2": {"File": "atras_sonic_parado.bmp", "Rect": "35,0,22,39", "Center": "9,18"},
+    "character_sonic_0x55_behind": {"File": "atras_sonic_parado.bmp", "Rect": "120,0,28,39", "Center": "17,19"},
+    "character_sonic_0x55_behind_1": {"File": "atras_sonic_parado.bmp", "Rect": "90,0,28,39", "Center": "17,19"},
+    "character_sonic_0x8f_behind": {"File": "atras_sonic_otros.bmp", "Rect":"39,0,37,31", "Center": "25,21"},
+    "character_sonic_0x8f_behind_1": {"File": "atras_sonic_otros.bmp", "Rect":"0,0,38,31", "Center": "26,21"},
+    "character_sonic_0x90_behind": {"File": "atras_sonic_colgado.bmp", "Rect":"68,0,29,48", "Center": "11,24"},
+    "character_sonic_0x90_behind_1": {"File": "atras_sonic_colgado.bmp", "Rect":"0,0,30,47", "Center": "13,24"},
+    "character_sonic_0x90_behind_2": {"File": "atras_sonic_colgado.bmp", "Rect":"35,0,26,48", "Center": "11,24"},
+    "character_sonic_0x91_behind": {"File": "atras_sonic_colgado.bmp", "Rect":"168,0,30,42", "Center": "11,24"},
+    "character_sonic_0x91_behind_1": {"File": "atras_sonic_colgado.bmp", "Rect":"99,0,33,42", "Center": "13,24"},
+    "character_sonic_0x91_behind_2": {"File": "atras_sonic_colgado.bmp", "Rect":"135,0,30,42", "Center": "11,24"}
+}

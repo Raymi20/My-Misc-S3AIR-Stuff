@@ -1,0 +1,410 @@
+#define CREDITS_CALC_IMPROVED = 1
+global u32 credits.u32_lines
+global u32 credits.line_count = 2 // Final spacing (assuming the spacing from the credits datagen starts from 1)
+global bool ICC.calc_done
+global u64 ICC.credsTimer
+#if MUSIC_SCRIPTS_ADJUSTED
+// Bypass level timer reset
+function void UpdateGameObjects()
+{
+	if ((global.zone == 0x0d || global.zone_act == 0x0a01) || ICC.credsTimer) && ICC.credsTimer != "stop" && !Outro.isSameMusic()
+	{
+		ICC.credsTimer++
+		if System.isDevModeActive()
+			debugLog(stringformat("Credits timer: %x", ICC.credsTimer))
+	}
+	base.UpdateGameObjects()
+}
+#endif
+function u32 CreditsDataGenerator.build(u8 creditsIndex)
+{
+	// This builds the credits data for S3&K
+	//  - credits index 0 originally starting at 0x05bc8a
+	//  - credits index 1 originally starting at 0x05bf48
+	//  - credits index 2 is the S3AIR-specific part
+
+	// Note on timing:
+	// Scrolling is exactly 3 lines per second
+
+	u32 startAddress = CreditsDataGenerator.startAddress
+
+	// First check if the data was written already
+	if (u32[startAddress + 0xfc] == 0xbadc0ffe && u8[startAddress + 0xfb] == creditsIndex)
+		return startAddress
+
+	u32 backupA0 = A0
+	u32 backupA1 = A1
+	A0 = startAddress
+	A1 = startAddress + 0x100
+
+	// Add the lines ending with "//!" to your custom credits (if you made ones), otherwise this mod breaks
+#if CREDITS_CALC_IMPROVED	//!
+	if ICC.calc_done		//!
+#endif						//!
+	// Write the signature, so we know if the data was written already
+		u8[A0 + 0xfb] = creditsIndex //? Add indent to this line
+	u32[A0 + 0xfc] = 0xbadc0ffe
+
+	if (creditsIndex == 0)
+	{
+		CreditsDataGenerator.addLine(0x0f, 0x03, 1, "EXECUTIVE PRODUCER")
+		CreditsDataGenerator.addLine(0x11, 0x07, 0, "HAYAO NAKAYAMA")
+
+		CreditsDataGenerator.addLine(0x21, 0x05, 1, "PROJECT MANAGERS")
+		CreditsDataGenerator.addLine(0x23, 0x08, 0, "HISASHI SUZUKI")
+		CreditsDataGenerator.addLine(0x24, 0x07, 0, "SHINOBU TOYODA")
+		CreditsDataGenerator.addLine(0x25, 0x07, 0, "MASAHARU YOSHII")
+
+		CreditsDataGenerator.addLine(0x35, 0x0c, 1, "PRODUCER")
+		CreditsDataGenerator.addLine(0x37, 0x0c, 0, "YUJI NAKA")
+
+		CreditsDataGenerator.addLine(0x47, 0x0d, 1, "DIRECTOR")
+		CreditsDataGenerator.addLine(0x49, 0x04, 0, "HIROKAZU YASUHARA")
+
+		CreditsDataGenerator.addLine(0x59, 0x04, 1, "LEAD GAME DESIGNER")
+		CreditsDataGenerator.addLine(0x5b, 0x04, 0, "HIROKAZU YASUHARA")
+
+		CreditsDataGenerator.addLine(0x6b, 0x01, 1, "SENIOR GAME DESIGNERS")
+		CreditsDataGenerator.addLine(0x6d, 0x05, 0, "HISAYOSHI YOSHIDA")
+		CreditsDataGenerator.addLine(0x6e, 0x08, 0, "TAKASHI IIZUKA")
+
+		CreditsDataGenerator.addLine(0x7e, 0x05, 1, "LEAD PROGRAMMER")
+		CreditsDataGenerator.addLine(0x80, 0x0c, 0, "YUJI NAKA")
+
+		CreditsDataGenerator.addLine(0x90, 0x03, 1, "SENIOR PROGRAMMERS")
+		CreditsDataGenerator.addLine(0x92, 0x06, 0, "TAKAHIRO HAMANO")
+		CreditsDataGenerator.addLine(0x93, 0x04, 0, "MASANOBU YAMAMOTO")
+
+		CreditsDataGenerator.addLine(0xa3, 0x03, 1, "CHARACTER DESIGNER")
+		CreditsDataGenerator.addLine(0xa5, 0x03, 0, "TAKASHI THOMAS YUDA")
+
+		CreditsDataGenerator.addLine(0xb5, 0x0b, 1, "C.G. ARTIST")
+		CreditsDataGenerator.addLine(0xb7, 0x09, 0, "KUNITAKE AOKI")
+
+		CreditsDataGenerator.addLine(0xc7, 0x09, 1, "ENEMY ARTIST")
+		CreditsDataGenerator.addLine(0xc9, 0x05, 0, "SATOSHI YOKOKAWA")
+
+		CreditsDataGenerator.addLine(0xd9, 0x08, 1, "SCENE ARTISTS")
+		CreditsDataGenerator.addLine(0xdb, 0x09, 0, "KUNITAKE AOKI")
+		CreditsDataGenerator.addLine(0xdc, 0x0a, 0, "CHIE YOSHIDA")
+		CreditsDataGenerator.addLine(0xdd, 0x09, 0, "TSUNEKO AOKI")
+		CreditsDataGenerator.addLine(0xde, 0x08, 0, "SHIGERU OKADA")
+		CreditsDataGenerator.addLine(0xdf, 0x03, 0, "TAKASHI THOMAS YUDA")
+		CreditsDataGenerator.addLine(0xe0, 0x05, 0, "SATOSHI YOKOKAWA")
+
+		CreditsDataGenerator.addLine(0xf0, 0x08, 1, "ART ASSISTANT")
+		CreditsDataGenerator.addLine(0xf2, 0x09, 0, "OSAMU OHASHI")
+
+		// Signal switch to second credits table (= credits index 1)
+		CreditsDataGenerator.addSignal(0xfff8)
+	}
+	else if (creditsIndex == 1)
+	{
+		CreditsDataGenerator.addLine(0x02, 0x06, 1, "MUSIC COMPOSERS")
+		CreditsDataGenerator.addLine(0x04, 0x0b, 0, "BRAD BUXER")
+		CreditsDataGenerator.addLine(0x05, 0x09, 0, "BOBBY BROOKS")
+		CreditsDataGenerator.addLine(0x06, 0x0a, 0, "DARRYL ROSS")
+		CreditsDataGenerator.addLine(0x07, 0x0a, 0, "GEOFF GRACE")
+		CreditsDataGenerator.addLine(0x08, 0x07, 0, "DOUG GRIGSBY III")
+		CreditsDataGenerator.addLine(0x09, 0x0d, 0, "SCIROCCO")
+		CreditsDataGenerator.addLine(0x0a, 0x07, 0, "HOWARD DROSSIN")
+
+		CreditsDataGenerator.addLine(0x1a, 0x06, 1, "SEGA SOUND TEAM")
+		CreditsDataGenerator.addLine(0x1c, 0x12, 0, "BO")
+		CreditsDataGenerator.addLine(0x1d, 0x09, 0, "SACHIO OGAWA")
+		CreditsDataGenerator.addLine(0x1e, 0x10, 0, "MILPO")
+		CreditsDataGenerator.addLine(0x1f, 0x05, 0, "MASARU SETSUMARU")
+		CreditsDataGenerator.addLine(0x20, 0x06, 0, "TATSUYUKI MAEDA")
+		CreditsDataGenerator.addLine(0x21, 0x06, 0, "TOMONORI SAWADA")
+		CreditsDataGenerator.addLine(0x22, 0x07, 0, "MASAYUKI NAGAO")
+		CreditsDataGenerator.addLine(0x23, 0x0b, 0, "JUN SENOUE")
+
+		CreditsDataGenerator.addLine(0x33, 0x04, 1, "SOUND COORDINATOR")
+		CreditsDataGenerator.addLine(0x35, 0x0a, 0, "HISAKI NIMIYA")
+
+		CreditsDataGenerator.addLine(0x45, 0x01, 1, "EXECUTIVE MANAGEMENT")
+		CreditsDataGenerator.addLine(0x47, 0x03, 0, "SHOUICHIROU IRIMAJIRI")
+		CreditsDataGenerator.addLine(0x48, 0x09, 0, "TOM KALINSKE")
+		CreditsDataGenerator.addLine(0x49, 0x0b, 0, "PAUL RIOUX")
+
+		CreditsDataGenerator.addLine(0x59, 0x06, 1, "PRODUCT MANAGER")
+		CreditsDataGenerator.addLine(0x5b, 0x09, 0, "PAMELA KELLY")
+
+		CreditsDataGenerator.addLine(0x6b, 0x01, 1, "EXECUTIVE COORDINATOR")
+		CreditsDataGenerator.addLine(0x6d, 0x07, 0, "MAMORU SHIGETA")
+		CreditsDataGenerator.addLine(0x6e, 0x0a, 0, "TOMIO TAKAMI")
+		CreditsDataGenerator.addLine(0x6f, 0x05, 0, "DIANE A. FORNASIER")
+		CreditsDataGenerator.addLine(0x70, 0x09, 0, "ROGER HECTOR")
+		CreditsDataGenerator.addLine(0x71, 0x02, 0, "TAKAHARU UTSUNOMIYA")
+
+		CreditsDataGenerator.addLine(0x81, 0x0d, 1, "TESTERS")
+		CreditsDataGenerator.addLine(0x83, 0x0b, 0, "JASON KUO")
+		CreditsDataGenerator.addLine(0x84, 0x0b, 0, "RICK GREER")
+		CreditsDataGenerator.addLine(0x85, 0x09, 0, "MIKE WILLIAMS")
+
+		CreditsDataGenerator.addLine(0x95, 0x02, 1, "SOUND SPECIAL THANKS")
+		CreditsDataGenerator.addLine(0x97, 0x03, 0, "MAYUMI NINA SAKAZAKI")
+		CreditsDataGenerator.addLine(0x98, 0x10, 0, "(MRM)")
+		CreditsDataGenerator.addLine(0x99, 0x0b, 0, "CUBE CORP.")
+		CreditsDataGenerator.addLine(0x9a, 0x0b, 0, "OPUS CORP.")
+		CreditsDataGenerator.addLine(0x9b, 0x04, 0, "MASANORI NAKAYAMA")
+		CreditsDataGenerator.addLine(0x9c, 0x0a, 0, "(STUDIO WHO)")
+
+		CreditsDataGenerator.addLine(0xac, 0x07, 1, "SPECIAL THANKS")
+		CreditsDataGenerator.addLine(0xae, 0x08, 0, "JINA ISHIWATARI")
+		CreditsDataGenerator.addLine(0xaf, 0x09, 0, "EMI KAWAMURA")
+		CreditsDataGenerator.addLine(0xb0, 0x04, 0, "DEBORAH MCCRACKEN")
+		CreditsDataGenerator.addLine(0xb1, 0x0a, 0, "TAKU MAKINO")
+
+		CreditsDataGenerator.addLine(0xc5, 1, "ORIGINAL GAME")
+		CreditsDataGenerator.addLine(0xc7, 0, "PRESENTED BY SEGA")
+
+		if (true)
+		{
+			// Signal switch to S3AIR credits table (= credits index 2)
+			CreditsDataGenerator.addSignal(0xfff8)
+		}
+		else
+		{
+			// Some spaces, then signal end
+			CreditsDataGenerator.addLine(0xd7, 0x10, 0, "   ")
+			CreditsDataGenerator.addSignal(0xfff4)
+		}
+	}
+	else
+	{
+		u8 line = 0xdc
+		CreditsDataGenerator.addLine(line,   1, "ANGEL ISLAND REVISITED")
+		line += 0x0c
+
+		CreditsDataGenerator.addLine(line,   1, "ENGINE AND GAME PORT")
+		CreditsDataGenerator.addLine(line+2, 0, "EUKARYOT")
+		line += 0x10
+
+		CreditsDataGenerator.addLine(line,   1, "REMASTERED MUSIC")
+		CreditsDataGenerator.addLine(line+2, 0, "G SPINDASH")
+		line += 0x10
+
+		CreditsDataGenerator.addLine(line,   1, "MACOS PORT")
+		CreditsDataGenerator.addLine(line+1, 1, "IOS AND WEB PORT")
+		CreditsDataGenerator.addLine(line+3, 0, "SAPPHARAD")
+		line += 0x11
+
+		CreditsDataGenerator.addLine(line,   1, "SWITCH PORT")
+		CreditsDataGenerator.addLine(line+2, 0, "HEYJOEWAY")
+		line += 0x10
+
+		CreditsDataGenerator.addLine(line,   1, "PSVITA PORT")
+		CreditsDataGenerator.addLine(line+2, 0, "GLEENTWINE")
+		CreditsDataGenerator.addLine(line+3, 0, "RINNEGATAMANTE")
+		CreditsDataGenerator.addLine(line+4, 0, "MDASHK")
+		line += 0x12
+
+		CreditsDataGenerator.addLine(line,   1, "ADDITIONAL CREDITS")
+		CreditsDataGenerator.addLine(line+2, 0, "CARJEM GENERATIONS")
+		CreditsDataGenerator.addLine(line+3, 0, "MASATO NAKAMURA")
+		CreditsDataGenerator.addLine(line+4, 0, "MARKEYJESTER")
+		CreditsDataGenerator.addLine(line+5, 0, "LINNCAKI")
+		CreditsDataGenerator.addLine(line+6, 0, "FLAMEWING")
+		CreditsDataGenerator.addLine(line+7, 0, "HYLLIAN")
+		CreditsDataGenerator.addLine(line+8, 0, "VINEGAR")
+		line += 0x16
+
+		CreditsDataGenerator.addLine(line,   1, "SPECIAL THANKS TO")
+		CreditsDataGenerator.addLine(line+2, 0, "FRED BRONZE")
+		CreditsDataGenerator.addLine(line+3, 0, "MAINMEMORY")
+		CreditsDataGenerator.addLine(line+4, 0, "VALLEYBELL")
+		CreditsDataGenerator.addLine(line+5, 0, "SAXMAN")
+		CreditsDataGenerator.addLine(line+6, 0, "THE SONIC RETRO")
+		CreditsDataGenerator.addLine(line+7, 0, "COMMUNITY")
+		line += 0x15
+
+		CreditsDataGenerator.addLine(line,   0, "A BIG THANK YOU")
+		CreditsDataGenerator.addLine(line+1, 0, "TO ALL SUPPORTERS")
+		CreditsDataGenerator.addLine(line+2, 0, "OF THIS PROJECT")
+		CreditsDataGenerator.addLine(line+4, 1, "YOU ARE THE BEST")
+		line += 0x12
+
+		// "Note: If changing the number of lines in the credits, make sure to also adjust 'u32 lines' in 'fn05b514()'" Yeah right
+
+		// Some spaces, then signal end
+		line = 0x79		// This is chosen to match timing
+		CreditsDataGenerator.addLine(line, 0x10, 0, "   ")
+		CreditsDataGenerator.addSignal(0xfff4)
+	}
+
+	A0 = backupA0
+	A1 = backupA1
+	return startAddress
+}
+function void CreditsDataGenerator.addSignal(u16 signal)
+{
+	if signal == 0xfff4 && !ICC.calc_done
+		ICC.calc_done = true
+	base.CreditsDataGenerator.addSignal(signal)
+}
+function void CreditsDataGenerator.addLine(u8 line, u8 left, u8 color, string text)
+{
+	if !ICC.calc_done
+	{
+		credits.line_count++
+		if System.isDevModeActive()
+			debugLog(stringformat("credits.line_count=%x", credits.line_count))
+	}
+	base.CreditsDataGenerator.addLine(line, left, color, text)
+}
+//# address-hook(0x05dfee) end(0x05e084)
+function void fn05dfee()
+{
+	objA0.update_address = 0x05e08a
+	objA0.mapping_offset = 0x060486
+	objA0.sprite_attributes = 0x026e
+	objA0.sprite_priority = 0x0380
+	objA0.animation.sprite = 0x01
+	objA0.box_size.x = 0x20
+	objA0.box_size.y = 0x14
+	objA0.render_flags |= render_flag.FLIP_X
+	objA0.position.x.u16 = 0x0220 + getScreenExtend()
+	objA0.position.y.u16 = 0xb0
+	objA0.velocity.x = -0x100 - (getScreenExtend() * 0x40 / 40)		// Faster plane needed
+
+	fn06001e()
+
+	playMusic(MUSIC_CREDITSMEDLEY)
+
+#if STANDALONE
+	// Reset frame counter so we can use it to get the current credits music playback position
+	level.framecounter = 0
+
+	// Start skippable cutscene again, to reset the timer
+	Game.startSkippableCutscene()
+#endif
+
+	// "spawnSimpleChildObjects(0x0601ca)" replaced by:
+	spawnSimpleChildObjects(0x05ecb4, 2)
+
+	// "spawnChildObjects(0x0601d0)" replaced by:
+	spawnChildObject(0x05ebf0, 0x00, 28, 0)
+
+	u8[0xfffffab8] &= ~0x01
+
+	// Spawn the Master Emerald
+	if (allocDynamicObjectStd())
+	{
+		objA1.update_address = 0x05de60
+		u16[A1 + 0x46] = A0.u16
+		objA1.position.x.u16 = 0x0190 + getScreenExtend()
+		objA1.position.y.u16 = 0xdc
+		u8[A1 + 0x2c] = 0xff
+	}
+
+	Kosinski.addToDMAQueue(0x162914, 0x4dc0)	// Smaller ending sprites + Sonic pilot head + chain
+
+#if STANDALONE
+	// Add missing Tornado flame, #contributed by mrgrassman14
+	spawnChildObject(0x05ec3c, 0x00, -10, 12)
+#endif
+}
+//# address-hook(0x05b514) end(0x05b564)
+function void fn05b514()
+{
+	D1 = 0
+	if (global.lock_on_state == 0)
+	{
+		D1.u16 += 0x24
+	}
+	if (global.region_code & 0x40)		// PAL region needs different timing
+	{
+		D1.u16 += 0x12
+	}
+
+	// Add 6 for Tails, 12 for Knuckles
+	if (isMainCharacter(CHARACTER_TAILS))
+	{
+		D1.u16 += 6
+	}
+	else if (isMainCharacter(CHARACTER_KNUCKLES))
+	{
+		D1.u16 += 12
+	}
+
+	// Add 4 for best ending, 2 for good ending, 0 for bad ending
+	D1.u16 += (outro.ending_type + 2)
+
+	// Set the credits scrolling speed
+	// Values for S3&K non-PAL:
+	//  - 0x00ce -> Sonic, Tails (bad & good endings)
+	//  - 0x00cf -> Sonic (best ending)
+	//  - 0x00cd -> Tails (best ending)
+	//  - 0x00c8 -> Knuckles (bad ending)
+	//  - 0x00bc -> Knuckles (good & best ending)
+	outro.scroll_speed = u32(u16[0x05b69e + D1.u16]) << 8
+
+	// Set the wait time until credits start
+	// Values for S3&K non-PAL:
+	//  - 0x02ee -> Sonic, Tails (bad ending)
+	//  - 0x0294 -> Sonic (good ending)
+	//  - 0x02ee -> Tails (good ending)
+	//  - 0x0000 -> Sonic, Tails (best ending)
+	//  - 0x00a5 -> Knuckles (bad ending)
+	//  - 0x0078 -> Knuckles (good & best ending)
+	outro.wait_time = u16[0x05b656 + D1.u16]
+
+#if STANDALONE
+	// Normally the credits data generation happens after the scrolling speed is calculated, but we need to count the lines for the sync to work properly
+	for (u8 i = 0; !ICC.calc_done; i++) // Porque me estoy volviendo tacaño con mis variables otra vez como en el mod de behind you
+	{
+		outro.scroll_speed = CreditsDataGenerator.build(i) // A little risky, but gets the job done
+		if System.isDevModeActive()
+			debugLog(stringformat("Counted lines from page %d", i+1))
+	}
+	credits.u32_lines = Math.roundToInt(credits.line_count*5.3f)
+	if System.isDevModeActive()
+		debugLog(stringformat("%d*%d=%d", credits.line_count, 5.3f, credits.u32_lines))
+	// Sync point in credits music (in frames from music start)
+	//  -> This is different for emulated original S&K medley and the longer remastered one featuring also S3 music tracks
+	u32 syncPoint = (Audio.getAudioKeyType(MUSIC_CREDITSMEDLEY) == AudioKeyType.EMULATED) ? 10070 : 11470
+	outro.scroll_speed = CreditsRoll.calculateScrollSpeed(syncPoint, credits.u32_lines)
+#endif
+}
+function u32 CreditsRoll.calculateScrollSpeed(u32 creditsEnd, u32 lines)
+{
+	// Credits start and end measured in frames from credits music start
+	//  -> In case of Knuckles' outro, the music will start in 0x5a frames, for the others it has started already
+	u32 creditsStart = global.zone_act == 0x0a01 ? (outro.wait_time - 0x5a) : (level.framecounter + outro.wait_time)
+#if MUSIC_SCRIPTS_ADJUSTED
+	if (Outro.isSameMusic())
+		creditsEnd -= creditsStart + ICC.credsTimer
+	ICC.credsTimer = "stop"
+#endif
+	if global.zone_act == 0x0a01
+	{
+		creditsEnd -= (outro.ending_type == -2) ? 0x248 : 0
+	}
+	else if (isMainCharacter(CHARACTER_SONIC) && outro.ending_type >= 0)
+	{
+		creditsEnd -= 0xda
+	}
+	else
+	{
+		creditsEnd -= (outro.ending_type > 0) ? 0x7c : 0x60
+	}
+	// Do our own scroll speed calculation (one more to "round up")
+	u32 credits.scroll_speed = (lines - 0x0e) * 0x1000 / (creditsEnd - creditsStart) + 1
+	if System.isDevModeActive()
+	{
+		debugLog(stringformat("lines=%x", lines))
+		debugLog(stringformat("creditsStart=%x, creditsEnd=%x", creditsStart, creditsEnd))
+		debugLog(stringformat("credits.scroll_speed=%x", credits.scroll_speed))
+	}
+
+	// Double check to get rounding errors out
+	s32 error =	creditsEnd - creditsStart - (lines - 0x0e) * 0x1000 / credits.scroll_speed
+
+	outro.wait_time += error
+	return credits.scroll_speed << 8
+}
+function u32 CreditsRoll.calculateScrollSpeed(u32 syncPoint)
+{
+	return CreditsRoll.calculateScrollSpeed(syncPoint, credits.u32_lines)
+}

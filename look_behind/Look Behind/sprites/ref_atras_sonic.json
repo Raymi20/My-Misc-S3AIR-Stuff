@@ -1,0 +1,56 @@
+{ "frames": [
+   {
+    "filename": "atras_sonic (Background) 0.ase",
+    "frame": { "x": 0, "y": 0, "w": 32, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 40 },
+    "sourceSize": { "w": 32, "h": 40 },
+    "duration": 17
+   },
+   {
+    "filename": "atras_sonic (Background) 1.ase",
+    "frame": { "x": 32, "y": 0, "w": 32, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 40 },
+    "sourceSize": { "w": 32, "h": 40 },
+    "duration": 17
+   },
+   {
+    "filename": "atras_sonic (Background) 2.ase",
+    "frame": { "x": 64, "y": 0, "w": 32, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 40 },
+    "sourceSize": { "w": 32, "h": 40 },
+    "duration": 65535
+   },
+   {
+    "filename": "atras_sonic (Background) 3.ase",
+    "frame": { "x": 96, "y": 0, "w": 32, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 40 },
+    "sourceSize": { "w": 32, "h": 40 },
+    "duration": 17
+   },
+   {
+    "filename": "atras_sonic (Background) 4.ase",
+    "frame": { "x": 128, "y": 0, "w": 32, "h": 40 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 40 },
+    "sourceSize": { "w": 32, "h": 40 },
+    "duration": 65535
+   }
+ ],
+ "meta": {
+  "app": "https://github.com/LibreSprite/LibreSprite/",
+  "version": "1.1-dev",
+  "image": "C:\\Users\\raymi\\AppData\\Roaming\\Sonic3AIR\\mods\\look_behind\\sprites\\atras_sonic.bmp",
+  "format": "I8",
+  "size": { "w": 160, "h": 40 },
+  "scale": "1"
+ }
+}

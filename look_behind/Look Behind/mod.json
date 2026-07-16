@@ -1,0 +1,51 @@
+{
+	"Metadata":
+	{
+		"Name": "Behind You!",
+		"UniqueID": "look_behind",
+		"Author": "SKR20!",
+		"Description": "Characters look behind themselves when they can't turn their whole bodies around",
+		"ModVersion": "1.0"
+	},
+	"Settings":
+	{
+		"Animation":
+		[
+			{
+				"InternalName": "Vel_BehindAnim",
+				"DisplayName": "Animation Speed",
+				"Variable": "atras.vel",
+				"DefaultValue": "2",
+				"Options":
+				{
+					"1": "2.0x",
+					"2": "1.0x",
+					"3": "0.333333x",
+					"4": "0.5x"
+				}
+			},
+			{
+				"InternalName": "Smooth_BehindAnim",
+				"DisplayName": "Animation Smoothness",
+				"Variable": "atras.flujo",
+				"DefaultValue": "0",
+				"Options":
+				{
+					"0": "Normal",
+					"1": "Full"
+				}
+			},
+			{
+				"InternalName": "0x91_BehindAnim",
+				"DisplayName": "Hanging Animation",
+				"Variable": "atras.0x91",
+				"DefaultValue": "0x92",
+				"Options":
+				{
+					"0x92": "0x90 and 0x91",
+					"0x90": "Only 0x91"
+				}
+			}
+		]
+	}
+}

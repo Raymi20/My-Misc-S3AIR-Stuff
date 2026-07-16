@@ -1,0 +1,259 @@
+include tools
+include slot
+
+function u8 Sms8Powa.playAudio(u8 sfxId)
+{
+	if !Sms8Powa.disableLBZ2MiniBossTheme && sfxId == 0x19 && global.zone_act == 0x0601 && camera.position.x.u16 >= 0x003800 && camera.position.x.u16 <= 0x003a68
+		return 0x18
+	return false
+}
+
+function bool Sms8Powa.onWriteToSpriteTable(s16 px, s16 py, u16 renderQueue)
+{
+	if(!Sms8Powa.disableAIZ1SpikeBug)
+		if(global.zone_act == 0x01) 
+			if(camera.position.x.u16 < 0x012c0)
+				if(camera.position.x.u16 > 0x01098) 
+					if(objA0.update_address == 0x02413e) 
+					{
+						bool prioFlag = (objA0.sprite_attributes & 0x8000) != 0
+						Renderer.drawCustomSprite("spike_replacement_fix", px, py, 0x00, (objA0.render_flags & 0x01) | (prioFlag ? SPRITE_FLAG_PRIO : 0), renderQueue)
+						return true
+					}
+
+	if(!Sms8Powa.disableCalmIcedus)
+		if(objA0.update_address == 0x08be74) 
+		{
+			bool prioFlag = (objA0.sprite_attributes & 0x8000) != 0
+			Renderer.drawCustomSprite("idle_icedus", px, py, 0x10, (objA0.render_flags & 0x01) | (prioFlag ? SPRITE_FLAG_PRIO : 0), renderQueue)
+			return true
+		}
+
+	//if System.isDevModeActive()
+	//	debugLog(stringformat("%x %x-%x %x",camera.position.x.u16,objA0.update_address,objA0.animation.sprite,global.zone_act))
+	return false
+}
+
+function bool Sms8Powa.chooseFittingMusic()
+{
+	if(!Sms8Powa.disableDEZ3InvincibilityMusicFix)
+		if(global.zone_act == 0x1700)
+			if (super.active || super.active.tails)
+			{
+				playMusic(level.default_music.u8)
+				return true
+			}
+
+	if(!Sms8Powa.disableLRZ3SuperMusicFix)
+		if(global.zone_act == 0x01600) 
+			if (super.active || super.active.tails)
+			{
+				playMusic(level.default_music.u8)
+				return true
+			}
+	return false
+}
+
+function void Character.updateBonusEffects()
+{
+	if(!Sms8Powa.disableLRZ3InvincibilityMusicFix)
+		if(global.zone_act == 0x01600) 
+			if (char.bonus_effect & char.bonus.INVINCIBLE)
+				if (char.invinc.countdown > 0)
+					if (level.boss_encounter)
+					{
+						level.boss_encounter = 0
+						base.Character.updateBonusEffects()
+						level.boss_encounter = 1
+						return
+					}
+	base.Character.updateBonusEffects()
+}
+
+
+function bool Standalone.onWriteToSpriteTable(s16 px, s16 py, u16 renderQueue)
+{
+	if(Sms8Powa.onWriteToSpriteTable(px, py,renderQueue))
+		return true
+	else if(base.Standalone.onWriteToSpriteTable(px, py, renderQueue))
+		return true
+	return false
+}
+
+function void Standalone.playAudio(u8 sfxId)
+{
+	if Sms8Powa.playAudio(sfxId)
+		sfxId = Sms8Powa.playAudio(sfxId)
+	base.Standalone.playAudio(sfxId)	
+}
+
+
+
+//# address-hook(0x0776ea) end(0x07770e)
+function void fn0776ea()
+{
+	base.fn0776ea()
+	if(!Sms8Powa.disableSOZ2BossInvincibilityMusicFix)
+		if (D2.u16 < 0xc0)
+			level.boss_encounter = 1
+}
+
+//# address-hook(0x080fa6) end(0x080ff0)
+function void fn080fa6()
+{
+	if(!Sms8Powa.disableLaserOnSuperHurt)
+	{
+		if (objA0.animation.sprite != 0x1e)
+			return
+		A1 = 0x080ff2
+		fn0858f8()
+		u32 backupD0 = D0
+		if (D0.u16 != 0)
+		{
+			A1 = 0xffff0000 + D0.u16
+			if (u8[A1 + 0x34] == 0 && ((u8[A1 + 0x2b] & char.bonus.INVINCIBLE) == 0 || super.active || super.active.tails))
+			{
+				Enemy.DamageCharacter()
+			}
+		}
+		D0 = backupD0 >> 16
+		if (D0.u16 != 0)
+		{
+			A1 = 0xffff0000 + D0.u16
+			if (u8[A1 + 0x34] == 0 && (u8[A1 + 0x2b] & char.bonus.INVINCIBLE) == 0)
+			{
+				Enemy.DamageCharacter()
+			}
+		}
+		return
+	}
+	base.fn080fa6()
+}
+
+function void chooseFittingMusic()
+{
+	if(Sms8Powa.chooseFittingMusic())
+		return
+	base.chooseFittingMusic()
+}
+
+function void Renderer.drawSprite(u64 key, s16 px, s16 py, u16 atex, u8 flags, u16 renderQueue)
+{
+	if (global.game_mode == 0x4c) //Data select
+		if(!WonderPower.disableAmyClearForSTK)
+		{
+			if Renderer.hasCustomSprite(WonderPower.keyZoneIcon(key))
+				key = WonderPower.keyZoneIcon(key)
+		}
+	base.Renderer.drawSprite(key, px, py, atex, flags, renderQueue)
+}
+
+function u64 WonderPower.keyZoneIcon(u64 key)
+{
+	if(WonderPower.isAmyLoaded() > 0x00) 
+	{
+		if(key == "ESS_Zone_Sonic_2")
+		{
+			if(WonderPower.isAmyLoaded() == 0x03) 
+				return "ESS_Zone_Es6_2"
+			return "ESS_Zone_Es3_2"
+		}
+		else if(key == "ESS_Zone_Tails_2")
+		{
+			if(WonderPower.isAmyLoaded() == 0x03) 
+				return "ESS_Zone_Es6_2"
+			return "ESS_Zone_Es3_2"
+		} 
+		else if(key == "ESS_Zone_Knuckles_2")
+		{
+			if(WonderPower.isAmyLoaded() == 0x03) 
+				return "ESS_Zone_Es6_2"
+			return "ESS_Zone_Es3_2"
+		}
+	}
+	return key
+}
+
+function string SlotsCustomiser.getIconSpriteKey(u8 slot)
+{
+	if(!WonderPower.disableMightyRaySlotIcon)
+		if(WonderPower.isMightyOrRay())
+		{
+			if(slot == 0x02)
+				return WonderPower.esMightySlotName()
+			if(slot == 0x03)
+				return WonderPower.esRaySlotName()
+		}
+
+	if(WonderPower.isAmySlotEnabled())
+		if(slot == WonderPower.amySlotIconType)
+		{
+			if(WonderPower.amySlotIconType != 1)
+				return WonderPower.getAmySlotName()
+			if(WonderPower.isAmy())
+				return WonderPower.getAmySlotName()
+		}
+
+	return base.SlotsCustomiser.getIconSpriteKey(slot)
+}
+
+function string WonderPower.getAmySlotName()
+{
+	u8 amyType = WonderPower.isAmyLoaded()
+	if(amyType == 0x02)
+		return WonderPower.esAmyOriginsSlotName()
+	if(amyType == 0x03)
+		return WonderPower.esAmyGaloreSlotName()
+	return WonderPower.esAmySlotName()
+}
+
+function string WonderPower.esAmyOriginsSlotName()
+{
+	return "slots_display_mm_amy_origins"
+}
+
+
+function string WonderPower.esAmyGaloreSlotName()
+{
+	string key = System.getGlobalVariableValueByName("Sprite") == 0x01 ? "slotAmyS3" : "AmySuperstarsSlot"
+	if(Renderer.hasCustomSprite(key))
+		return key
+	return "slots_display_mm_amy_origins"
+}
+
+function string WonderPower.esAmySlotName()
+{
+	string key = "slots_display_amy"
+	if(Renderer.hasCustomSprite(key))
+		return key
+	return "slots_display_mm_amy"
+}
+
+function string WonderPower.esMightySlotName()
+{
+	string key = "slots_display_mighty"
+	if(Renderer.hasCustomSprite(key))
+		return key
+	return "slots_display_mm_mighty"
+}
+
+function string WonderPower.esRaySlotName()
+{
+	string key = "slots_display_ray"
+	if(Renderer.hasCustomSprite(key))
+		return key
+	return "slots_display_mm_ray"
+}
+
+function void ESCU_SlotsCustomiser()
+{
+	if(!WonderPower.disableMightyRaySlotIcon)
+		if(WonderPower.isMightyOrRay())
+			return
+
+	if(WonderPower.isAmySlotEnabled())
+		if(WonderPower.isAmyLoaded()) 
+			return
+
+	base.ESCU_SlotsCustomiser()
+}

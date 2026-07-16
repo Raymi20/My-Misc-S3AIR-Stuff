@@ -1,0 +1,17 @@
+{
+    "Metadata": {
+        "Name": "Improved Credits Calculation",
+        "UniqueID": "creds_calc",
+        "Description": "Makes the Credits Roll sync point calculation into its own function and auto calculates the value of u32_lines",
+        "Version": "1.0",
+        "Author": "SKR20!"
+    },
+    "OtherMods": {
+        "music_script_adj":
+        {
+            "DisplayName": "Music Script Adjustments",
+            "IsRequired": "0",
+            "Priority": "Lower"
+        }
+    }
+}

@@ -1,0 +1,56 @@
+#if !S3K_AST
+global u64 DEZcad.counter
+global bool DEZcad.LBZ2knux_obj
+function u64 Standalone.getModdedSoundKey(u64 soundKey, u8 sfxId, u8 soundRegType)
+{
+    if sfxId == 0x16 && char.control_flags & 0xc3 && (global.zone_act == 0x0601 || (global.zone_act == 0x0a00 && level.results_done))
+        soundKey = "dez_cad"
+    return base.Standalone.getModdedSoundKey(soundKey, sfxId, soundRegType)
+}
+// Check if Knuckles is present in LBZ2
+//# address-hook(0x0628aa) end(0x0628cc)
+function void fn0628aa()
+{
+    base.fn0628aa()
+    DEZcad.LBZ2knux_obj = true
+}
+// Death Egg rises in LBZ2
+//# address-hook(0x05480c) end(0x0549c4)
+function void fn05480c()
+{
+    if !DEZcad.LBZ2knux_obj && !DEZcad.counter // Knuckles (even if it doesn't make sense on his story)
+        playMusic(MUSIC_DEZ1)
+    DEZcad.counter++
+    base.fn05480c()
+}
+//# address-hook(0x085b60) end(0x085b84)
+function void PlayMusicAfterLevelResults()
+{
+    base.PlayMusicAfterLevelResults()
+    if DEZcad.LBZ2knux_obj && DEZcad.counter && !level.boss_encounter // Not Knuckles
+        playMusic(MUSIC_DEZ1)
+    DEZcad.counter = 0
+}
+// After Big Arm's defeat
+//# address-hook(0x072e9e) end(0x072ed4)
+function void fn072e9e()
+{
+    playMusic(MUSIC_DEZ1)
+    base.fn072e9e()
+}
+// After Mecha Sonic Mk II's defeat
+function void fn05806e()
+{
+    base.fn05806e()
+    if (!DEZcad.counter)
+        playMusic(MUSIC_DEZ1)
+    DEZcad.counter++
+}
+// After completing a zone
+//# address-hook(0x085e3a) end(0x085e50)
+function void TriggerNextZone()
+{
+    DEZcad.counter = 0 // How long does it even take to complete the entire game in one sitting anyways?
+    base.TriggerNextZone()
+}
+#endif

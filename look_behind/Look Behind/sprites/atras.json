@@ -1,0 +1,7 @@
+{
+    "character_sonic_0xba_behind": {"File": "atras_sonic.bmp", "Rect": "70,0,89,41", "Center": "8,20"},
+    "character_sonic_0xba_behind_1": {"File": "atras_sonic.bmp", "Rect": "0,0,27,39", "Center": "13,20"},
+    "character_sonic_0xba_behind_2": {"File": "atras_sonic.bmp", "Rect": "37,0,22,39", "Center": "9,20"},
+    "character_sonic_0x55_behind": {"File": "atras_sonic.bmp", "Rect": "86,1,32,32", "Center": "14,17"},
+    "character_sonic_0x55_behind_1": {"File": "atras_sonic.bmp", "Rect": "118,1,32,32", "Center": "14,17"}
+}

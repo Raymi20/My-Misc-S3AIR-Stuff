@@ -1,0 +1,6 @@
+{
+	"slots_display_mm_amy":  { "File": "slots.png", "Rect": "0, 0, 32, 32", "Center": "16, 16" },
+	"slots_display_mm_mighty":  { "File": "slots.png", "Rect": "32, 0, 32, 32", "Center": "16, 16" },
+	"slots_display_mm_ray":  { "File": "slots.png", "Rect": "64, 0, 32, 32", "Center": "16, 16" },
+	"slots_display_mm_amy_origins":  { "File": "slots.png", "Rect": "96, 0, 32, 32", "Center": "16, 16" }
+}

@@ -1,0 +1,871 @@
+{
+	"Metadata":
+	{
+		"Name": "Sonic 3 & Knuckles Alternate Soundtrack",
+		"UniqueID": "s3k-ast",
+		"Author": "SquirrelKingR20! (SKR20!)",
+		"Description": "Logo made by Willrocks23, 16px version made by SKR20!. Alternate tracks made by: Leila 'Woofle' Wilson, Sean Evans, John 'Joy' Tay, Scooblee, marcb0t, Tetra, Iskalim, astral.amethyst, Remixis SG, SKR20! & Zaiden/Sonicn't (ft. 4sythe, Uhrwerk Clockwerx, A M 4 N, lazuli, Rudney RRadness, & Ivory) (Other tracks made by Karl Brueggemann, RRad, and Rumy). USING MUSIC SCRIPT ADJUSTMENTS AND IMPROVED CREDITS CALCULATIONS IS STRONGLY RECOMMENDED",
+		"ModVersion": "3.0",
+		"GameVersion": "22.09.10.0"
+	},
+	"OtherMods":
+	{
+        "music_script_adj":
+        {
+            "DisplayName": "Music Script Adjustments",
+            "IsRequired": "0",
+            "Priority": "Lower"
+        },
+        "creds_calc":
+        {
+            "DisplayName": "Improved Credits Calculation",
+            "IsRequired": "0",
+            "Priority": "Lower"
+        },
+        "SoundAdditionsPlus.zip":
+        {
+            "DisplayName": "Sound Additions Plus",
+            "IsRequired": "0",
+            "Priority": "Lower"
+        },
+        "SoundAdditionsPlus":
+        {
+            "DisplayName": "Sound Additions Plus (unzipped)",
+            "IsRequired": "0",
+            "Priority": "Lower"
+        },
+		"Music Cues Customization":
+		{
+			"DisplayName": "Music Cues Customization",
+			"IsRequired": "0",
+			"Priority": "Higher"
+		},
+		"wonder-power-fixes-tweaks":
+		{
+			"DisplayName": "Wonder Power's Micro-Mods",
+			"IsRequired": "0",
+			"Priority": "Lower"
+		},
+		"non-interruptive-life-jingles-pale":
+		{
+			"DisplayName": "Non-Interruptive Life Jingles",
+			"IsRequired": "0",
+			"Priority": "Higher"
+		},
+        "minor_sonic_3_tweaks_v141.zip":
+        {
+            "DisplayName": "Minor Sonic 3 Tweaks",
+            "IsRequired": "0",
+            "Priority": "Lower"
+        },
+        "minor_sonic_3_tweaks_v141":
+        {
+            "DisplayName": "Minor Sonic 3 Tweaks (unzipped)",
+            "IsRequired": "0",
+            "Priority": "Lower"
+        },
+		"Separate Super and Hyper Themes":
+		{
+			"DisplayName": "Separate Super and Hyper Themes",
+			"IsRequired": "0",
+			"Priority": "Lower"
+		},
+        "DEMKIIZ-Act-2":
+		{
+			"DisplayName": "Death Egg MK. II Zone Act 2",
+			"IsRequired": "0",
+			"Priority": "Lower"
+		},
+        "LBZ Background on My take 2.1":
+        {
+            "DisplayName": "LBZ Background on My take",
+            "IsRequired": "0",
+            "Priority": "Lower"
+        },
+        "extra_mushrooms": // PaperTriangle we NEED you to turn this into 15 or more smaller mods
+        {
+            "DisplayName": "Sonic 3 A.I.R. with Extra Mushrooms",
+            "IsRequired": "0",
+            "Priority": "Lower"
+        },
+        "extra_mushrooms_plus": // Oh god why
+        {
+            "DisplayName": "Sonic 3 A.I.R. with Extra Mushrooms Plus",
+            "IsRequired": "0",
+            "Priority": "Lower"
+        }
+	},
+	"Settings":
+	{
+        "A.S.T.":
+        [
+            {
+				"InternalName": "Title Music",
+                "DisplayName": "Title Screen Music",
+				"Category": "Miscellaneous",
+                "Variable": "option.altTitleTrack",
+                "DefaultValue": "3",
+                "Options":
+                {
+                    "0": "SKR20! (Sonic 3)",
+                    "1": "marcb0t (Sonic 3)",
+                    "2": "Remixis SG (Sonic 3)",
+                    "3": "John Tay (S&K V2)",
+                    "4": "John Tay (S&K V1)",
+					"5": "John Tay (S&K V1, R20! edit)"
+                }
+			},
+            {
+                "InternalName": "Menu Music",
+                "DisplayName": "Save Select Music",
+                "Category": "Miscellaneous",
+                "Variable": "option.altSaveSlctTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Woofle",
+                    "1": "Woofle (SKR20;s Arrange)"
+                }
+            },
+			{
+                "InternalName": "Invin Music",
+                "DisplayName": "Invincibility Music",
+                "Category": "Miscellaneous",
+                "Variable": "option.altInvinTrack",
+                "DefaultValue": "2",
+                "Options":
+                {
+                    "0": "SKR20! (Sonic 3)",
+                    "1": "astral.amethyst (Sonic 3)",
+                    "2": "John Tay (S&K V2)",
+                    "3": "John Tay (S&K V1)",
+					"4": "Pick by Zone (See next)"
+                }
+			},
+			{
+				"InternalName": "PbZ S3 Invin Music",
+                "DisplayName": "S3 Invin Music (if PbZ is on)",
+                "Category": "Miscellaneous",
+                "Variable": "option.pbzAltS3InvinTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "SKR20!",
+                    "1": "astral.amethyst"
+                }
+			},
+			{
+				"InternalName": "PbZ S&K Invin Music",
+                "DisplayName": "S&K Invin Music (if PbZ is on)",
+                "Category": "Miscellaneous",
+                "Variable": "option.pbzAltSKInvinTrack",
+                "DefaultValue": "2",
+                "Options":
+                {
+                    "2": "John Tay (V2)",
+					"3": "John Tay (V1)"
+                }
+			},
+			{
+				"InternalName": "1UP Jingle",
+				"DisplayName": "1UP Jingle",
+				"Category": "Miscellaneous",
+                "Variable": "option.alt1upTrack",
+				"DefaultValue": "1",
+				"Options":
+				{
+					"0": "SKR20! (Sonic 3)",
+					"1": "John Tay (S&K V2)",
+					"2": "John Tay (S&K V2 Tumblr)",
+					"3": "John Tay (S&K V1)",
+					"4": "Pick by Zone (See next)"
+				}
+			},
+			{
+                "InternalName": "PbZ S3 1UP Jingle",
+				"DisplayName": "S3 1UP Jingle (if PbZ is on)",
+				"Category": "Miscellaneous",
+                "Variable": "s3ka.dummyNotUseless",
+				"DefaultValue": "0",
+				"Options":
+				{
+					"0": "SKR20! (Sonic 3)"
+				}
+			},
+			{
+				"InternalName": "PbZ S&K 1UP Jingle",
+				"DisplayName": "S&K 1UP Jingle (if PbZ is on)",
+				"Category": "Miscellaneous",
+                "Variable": "option.pbzAltSK1upTrack",
+				"DefaultValue": "3",
+				"Options":
+				{
+					"2": "John Tay (S&K V2)",
+					"3": "John Tay (S&K V2 Tumblr)",
+					"4": "John Tay (S&K V1)"
+				}
+			},
+			{
+				"InternalName": "Knux Music",
+                "DisplayName": "Knuckles Theme",
+                "Category": "Miscellaneous",
+                "Variable": "option.altKnuxTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Woofle (Sonic 3)",
+                    "1": "Turret3471's Arr. (S3)",
+					"2": "John Tay (S&K)",
+					"3": "Pick by Zone (Wlf S3, JT S&K)",
+					"4": "Pick by Zone (T3K Arr, JT S&K)"
+                }
+			},
+			{
+                "InternalName": "Drown Theme",
+				"DisplayName": "Drowning Theme",
+				"Category": "Miscellaneous",
+                "Variable": "option.altDrownTrack",
+				"DefaultValue": "2",
+				"Options":
+				{
+					"0": "John Tay (S&K Unreleased)",
+					"1": "Zaiden/Sonicn't (Sonic 2)",
+					"2": "Imperfect (Sonic 1)"
+				}
+			},
+			{
+                "InternalName": "Super Music",
+                "DisplayName": "Super Sonic Music",
+                "Category": "Miscellaneous",
+                "Variable": "option.altSuperTrack",
+                "DefaultValue": "4",
+                "Options":
+                {
+                    "0": "SKR20! (Sonic 3)",
+                    "1": "astral.amethyst (Sonic 3)",
+                    "2": "John Tay (S&K V2)",
+                    "3": "John Tay (S&K V1)",
+					"4": "Iskalim (Super)",
+					"5": "Zaiden/Sonicn't (Sonic 2)",
+					"7": "Option from Settings"
+                }
+			},
+			{
+                "InternalName": "Hyper Music",
+                "DisplayName": "Hyper Sonic Music",
+                "Category": "Miscellaneous",
+                "Variable": "option.altHyperTrack",
+                "DefaultValue": "7",
+                "Options":
+                {
+                    "6": "Iskalim (Hyper)",
+					"7": "Use Super Theme option"
+				}
+			},
+			{
+                "InternalName": "Miniboss Music",
+                "DisplayName": "Miniboss Music",
+                "Category": "Boss Themes",
+                "Variable": "option.altMinibossTrack",
+                "DefaultValue": "2",
+                "Options":
+                {
+                    "0": "Woofle (Sonic 3)",
+                    "1": "Iskalim (Sonic 3)",
+					"2": "John Tay (S&K)",
+                    "3": "Iskalim (S&K)",
+					"4": "Pick by Zone (see next)"
+                }
+			},
+            {
+                "InternalName": "Pbz S3 Minib. Music",
+                "DisplayName": "S3 Minib. Music (if PbZ is on)",
+                "Category": "Boss Themes",
+                "Variable": "option.pbzAltS3MinibossTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Woofle",
+                    "1": "Iskalim"
+                }
+            },
+            {
+                "InternalName": "Pbz S&K Minib. Music",
+                "DisplayName": "S&K Minib. Music (if PbZ is on)",
+                "Category": "Boss Themes",
+                "Variable": "option.pbzAltSKMinibossTrack",
+                "DefaultValue": "2",
+                "Options":
+                {
+                    "2": "John Tay",
+                    "3": "Iskalim"
+                }
+            },
+			{
+				"InternalName": "Boss Music",
+                "DisplayName": "Boss Music",
+                "Category": "Boss Themes",
+                "Variable": "option.altBossTrack",
+                "DefaultValue": "2",
+                "Options":
+                {
+                    "0": "Woofle (Sonic 3)",
+                    "1": "Ivory (Sonic 3 Arr.)",
+                    "2": "John Tay (S&K)",
+					"3": "John Tay (S&K, 2nd Part)",
+					"4": "Iskalim",
+					"5": "Pick by Zone (See next)"
+                }
+			},
+			{
+                "InternalName": "PbZ S3 Boss Music",
+                "DisplayName": "S3 Boss Music (if PbZ is on)",
+                "Category": "Boss Themes",
+                "Variable": "option.pbzAltS3BossTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Woofle",
+                    "1": "Ivory's Arrange"
+                }
+			},
+			{
+				"InternalName": "PbZ S&K Boss Music",
+                "DisplayName": "S&K Boss Music (if PbZ is on)",
+                "Category": "Boss Themes",
+                "Variable": "option.pbzAltSKBossTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "2": "John Tay",
+					"3": "John Tay (2nd Part)"
+                }
+			},
+			{
+                "InternalName": "AIZ1 Music",
+                "DisplayName": "Angel Island Act 1 Music",
+				"Category": "Zone Themes",
+                "Variable": "option.altAIZ1Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Original",
+                    "1": "John Tay's Arrange",
+					"2": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "AIZ2 Music",
+                "DisplayName": "Angel Island Act 2 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altAIZ2Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Original",
+                    "1": "RRadness' Arrange",
+					"2": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "HCZ1 Music",
+                "DisplayName": "Hydrocity Act 1 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altHCZ1Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Original",
+                    "1": "John Tay's Arrange",
+					"2": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "HCZ2 Music",
+                "DisplayName": "Hydrocity Act 2 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altHCZ2Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Original",
+                    "1": "RRadness' Arrange",
+					"2": "RRad's Arr. (R20! edit)"
+                }
+			},
+			{
+				"InternalName": "MGZ1 Music",
+                "DisplayName": "Marble Garden Act 1 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altMGZ1Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Original",
+                    "1": "lazuli's Arrange",
+					"2": "RRadness' Arrange",
+					"3": "Iskalim"
+                }
+			},
+			{
+				"InternalName": "MGZ2 Music",
+                "DisplayName": "Marble Garden Act 2 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altMGZ2Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Original",
+                    "1": "RRadness' Arrange",
+                    "2": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "MGZ2 Knux Music",
+                "DisplayName": "MGZ2 Knux Exclusive Ver.",
+                "Category": "Track Behavior",
+                "Variable": "enable.altMGZ2KnuxTrack",
+                "DefaultValue": "1",
+                "Options":
+                {
+                    "0": "Off",
+                    "1": "On (Ivory)"
+                }
+			},
+			{
+				"InternalName": "CNZ1 Music",
+                "DisplayName": "Carnival Night Act 1 Music",
+                "Category": "Zone Themes",
+                 "Variable": "option.altCNZ1Track",
+                 "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Woofle",
+                    "1": "Woofle (Old)",
+					"2": "Woofle (RRad's Arr.)",
+                    "3": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "CNZ2 Music",
+                "DisplayName": "Carnival Night Act 2 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altCNZ2Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Woofle",
+					"1": "Woofle (RRad's Arr.)",
+                    "2": "Woofle (Old)",
+                    "3": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "ICZ1 Music",
+                "DisplayName": "Ice Cap Act 1 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altICZ1Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Woofle",
+					"1": "Woofle (RRad's Arr.)",
+					"2": "Woofle (Ivory's Arr.)",
+                    "3": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "ICZ2 Music",
+                "DisplayName": "Ice Cap Act 2 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altICZ2Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Woofle",
+					"1": "Woofle (RRad's Arr.)",
+					"2": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "LBZ1 Music",
+                "DisplayName": "Launch Base Act 1 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altLBZ1Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Old DEZ Motif (Woofle)",
+                    "1": "New DEZ Motif (Ivory)",
+					"2": "Ivory's Arr. (Non-MJ Ed.)"
+                }
+			},
+			{
+				"InternalName": "LBZ2 Music",
+                "DisplayName": "Launch Base Act 2 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altLBZ2Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Old DEZ Motif (Woofle)",
+                    "1": "New DEZ Motif (Ivory)",
+					"2": "New DEZ Motif (RRadness)"
+                }
+			},
+			{
+                "InternalName": "S3 FinalBoss Music",
+				"DisplayName": "Big Arms Final Boss Music",
+				"Category": "Boss Themes",
+                "Variable": "option.altS3FinBossTrack",
+				"DefaultValue": "1",
+				"Options":
+				{
+					"0": "John Tay (V2)",
+					"1": "John Tay (V1)"
+				}
+			},
+			{
+				"InternalName": "MHZ1 Music",
+                "DisplayName": "Mushroom Hill Act 1 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altMHZ1Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Woofle",
+                    "1": "John Tay",
+                    "2": "Zaiden/Sonicn't",
+                    "3": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "MHZ2 Music",
+                "DisplayName": "Mushroom Hill Act 2 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altMHZ2Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "John Tay",
+                    "1": "Zaiden/Sonicn't",
+                    "2": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "SOZ1 Music",
+                "DisplayName": "Sandopolis Act 1 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altSOZ1Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "John Tay",
+                    "1": "Iskalim"
+                }
+			},
+			{
+				"InternalName": "LRZ1 Music",
+                "DisplayName": "Lava Reef Zone Act 1 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altLRZ1Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "John Tay",
+                    "1": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "LRZ2 Music",
+                "DisplayName": "Lava Reef Zone Act 2 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altLRZ2Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "John Tay",
+                    "1": "Iskalim"
+                }
+			},
+            {
+                "InternalName": "Knux HPZ in LRZ2",
+                "DisplayName": "Play HPZ in LRZ2 as Knuckles",
+                "Category":"Track Behavior",
+                "Variable": "enable.knuxHPZinLRZ2",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Off",
+                    "1": "On (John Tay)"
+                }
+            },
+			{
+				"InternalName": "HPZ Music",
+                "DisplayName": "Hidden Palace Zone Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altHPZTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "John Tay",
+                    "1": "Iskalim"
+                }
+			},
+			{
+				"InternalName": "HPZ Knux Music",
+                "DisplayName": "HPZ Knuckles Fight Music",
+                "Category": "Boss Themes",
+                "Variable": "option.altKnuxFightTrack",
+                "DefaultValue": "1",
+                "Options":
+                {
+                    "0": "Use Menu option",
+					"1": "Use PbZ S3 Miniboss option",
+                    "2": "Use PbZ SK Miniboss option"
+                }
+			},
+			{
+				"InternalName": "HPZ Emerald Steal Music",
+                "DisplayName": "HPZ Emerald Steal Music",
+                "Category": "Boss Themes",
+                "Variable": "option.altEmeraldStealTrack",
+                "DefaultValue": "1",
+                "Options":
+                {
+                    "1": "Use Miniboss option",
+                    "2": "Use PbZ S3 Miniboss option",
+					"3": "Use PbZ SK Miniboss option"
+                }
+			},
+			{
+				"InternalName": "SSZ Music",
+                "DisplayName": "Sky Sanctuary Zone Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altSSZTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "John Tay",
+                    "1": "Iskalim"
+                }
+			},
+			{
+                "InternalName": "S1 Boss Music",
+                "DisplayName": "Sonic 1 Boss Music",
+                "Category": "Boss Themes",
+                 "Variable": "option.altSonic1BossTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "AChnn12",
+                    "1": "Evencomet Studio",
+                    "2": "Clone92"
+                }
+			},
+			{
+                "InternalName": "S&T Mecha Music",
+                "DisplayName": "S&T Mecha Sonic Music",
+                "Category": "Boss Themes",
+                "Variable": "option.altMechaTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Iskalim",
+					"1": "Iskalim (S4Ep2 Motif)",
+					"2": "Use Boss Theme option"
+                }
+			},
+			{
+				"InternalName": "Knux Mecha Phase 1 Music",
+                "DisplayName": "Knux Mecha S. Phase 1 Music",
+                "Category": "Boss Themes",
+                "Variable": "option.altMecha1Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Iskalim",
+					"1": "Iskalim (S4Ep2 Motif)",
+					"2": "Big Arms (V2)",
+                    "3": "Big Arms (V1)"
+				}
+			},
+			{
+                "InternalName": "Knux Mecha Phase 2 Music",
+                "DisplayName": "Knux Mecha S. Phase 2 Music",
+                "Category": "Boss Themes",
+                "Variable": "option.altMecha2Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "TTLiS Ultra DX Ed. (John Tay)",
+					"1": "TTLiS (John Tay)",
+                    "2": "The Doomsday (Iskalim)"
+                }
+			},
+			{
+                "InternalName": "DEZ1 Music",
+                "DisplayName": "Death Egg Act 1 Music",
+				"Category": "Zone Themes",
+				"Variable": "option.altDEZ1Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Scooblee (Sonic 3)",
+                    "1": "John Tay (S&K)",
+					"2": "Zaiden/Sonicn't (Z-Alt.)"
+                }
+			},
+			{
+				"InternalName": "DEZ2 Music",
+                "DisplayName": "Death Egg Act 2 Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altDEZ2Track",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Scooblee (Sonic 3)",
+                    "1": "John Tay (S&K)",
+					"2": "Zaiden/Sonicn't (Z-Alt.)"
+                }
+			},
+			{
+                "InternalName": "S&K FinalBoss Music",
+				"DisplayName": "DEZ2 Final Boss Music",
+				"Category": "Boss Themes",
+                "Variable": "option.altSKFinBossTrack",
+				"DefaultValue": "2",
+				"Options":
+				{
+					"0": "John Tay (V2)",
+					"1": "John Tay (V1)"
+				}
+			},
+			{
+				"InternalName": "DDZ Music",
+                "DisplayName": "The Doomsday Music",
+                "Category": "Zone Themes",
+                "Variable": "option.altDDZTrack",
+                "DefaultValue": "2",
+                "Options":
+                {
+                    "0": "TTLiS Ultra DX Ed. (John Tay)",
+                    "1": "TTLiS (John Tay)",
+                    "2": "Iskalim"
+                }
+			},
+            {
+                "InternalName": "Only BE Medley",
+                "DisplayName": "Best Ending",
+                "Category": "Track Behavior",
+                "Variable": "enable.onlyMedleyifBE",
+                "DefaultValue": "1",
+                "Options":
+                {
+                    "0": "Default (Outro --> Credits)",
+                    "1": "Credits only (John Tay)"
+                }
+            },
+			{
+			    "InternalName": "Ending Music",
+			    "DisplayName": "Outro Music",
+			    "Category": "Miscellaneous",
+			    "Variable": "option.altOutroTrack",
+			    "DefaultValue": "0",
+			    "Options":
+			    {
+			    	"0": "Woofle (Ver. A)",
+			    	"1": "Woofle (Ver. B)"
+			    }
+			},
+			{
+                "InternalName": "Slot Music",
+                "DisplayName": "Slot Machine Music",
+				"Category": "Bonus Themes",
+                "Variable": "option.altSlotTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "John Tay",
+                    "1": "Iskalim"
+                }
+			},
+			{
+				"InternalName": "Glowball Music",
+                "DisplayName": "Glowing Spheres Music",
+				"Category": "Bonus Themes",
+                "Variable": "option.altGlowballTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Iskalim",
+                    "1": "Tetra"
+                }
+			},
+			{
+				"InternalName": "Gumball Music",
+                "DisplayName": "Gumball Machine Music",
+                "Category": "Bonus Themes",
+                "Variable": "option.altGumballTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "John Tay",
+                    "1": "Iskalim"
+                }
+			},
+			{
+				"InternalName": "Cont Music",
+                "DisplayName": "Continue/Comp. Results Music",
+                "Category": "Miscellaneous",
+                "Variable": "option.altContinueTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "John Tay (Unreleased)",
+					"1": "John Tay (Edited Act Clear)",
+                    "2": "Iskalim",
+                    "3": "Pick by Zone (see next)"
+                }
+			},
+            {
+                "InternalName": "PbZ S3 Cont Music",
+                "DisplayName": "S3 Continue Music (if PbZ is on)",
+                "Category": "Miscellaneous",
+                "Variable": "s3ka.dummyNotUseless",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "Iskalim"
+                }
+            },
+            {
+                "InternalName": "PbZ S&K Cont Music",
+                "DisplayName": "S&K Continue Music (if PbZ is on)",
+                "Category": "Miscellaneous",
+                "Variable": "option.pbzAltSKContTrack",
+                "DefaultValue": "0",
+                "Options":
+                {
+                    "0": "John Tay (Unreleased)",
+                    "1": "John Tay (Edited Act Clear)"
+                }
+            }
+		],
+        "Discord":
+        [
+            {
+                "InternalName": "DiscordRichPresence",
+                "DisplayName": "Use Discord RPC",
+                "Category": "Discord",
+                "Variable": "s3ka.enableDiscordRPC",
+                "DefaultValue": "1",
+                "Options":
+                {
+                    "0": "Off",
+                    "1": "On (over details section)"
+                }
+            }
+        ]
+	}
+}

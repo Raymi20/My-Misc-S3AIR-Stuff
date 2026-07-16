@@ -1,0 +1,5 @@
+{
+    "character_sonic_0x8f": {"File": "atras_sonic_otros.bmp", "Rect": "0,0,38,31", "Center": "26,22"},
+    "character_sonic_0x8f_behind": {"File": "atras_sonic_otros.bmp", "Rect":"77,0,37,31", "Center": "25,22"},
+    "character_sonic_0x8f_behind_1": {"File": "atras_sonic_otros.bmp", "Rect":"38,0,38,31", "Center": "26,22"}
+}

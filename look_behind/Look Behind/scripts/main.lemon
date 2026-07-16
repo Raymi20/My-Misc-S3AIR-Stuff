@@ -1,0 +1,93 @@
+global u8 atras.reloj[3]
+global u8 atras.situacion
+global u16 atras.0x91
+global u8 atras.vel
+global bool atras.flujo
+constant array<u16> LOOK_BEHIND.VALID = {0xba, 0x55, 0x8f, 0x90, 0x91, 0x92}
+function u64 Standalone.getModdedAnimationSpriteKey(u8 character, u16 animationSpriteEx)
+{
+    // Index to use with the timer so the sidekick won't break the anim (is it even possible to get to 2?)
+    u8 type = A0 == 0xffffb000 ? 0 : (A0 == 0xffffb04a ? 1 : 2)
+    // Thx retroscriptv3 for teaching me the dark arts of variable recycling <3
+    u64 atras.anim
+    u64 atras.sprite
+    // Check if current anim is valid to look behind
+    for (;atras.sprite < LOOK_BEHIND.VALID.length() && !atras.anim; atras.sprite++) // Ni para el for loop hago una variable más
+        atras.anim = animationSpriteEx == LOOK_BEHIND.VALID[atras.sprite]
+    // Debugging
+    if System.isDevModeActive() && objA0.mapping_offset != 0x344bb8
+    {
+        debugLog(stringformat("character=%x, char.control_flags=%b, animationSpriteEx=%x, control.pad1.state=%b", character, char.control_flags, animationSpriteEx, control.pad1.state))
+        debugLog(stringformat("atras.situacion=%x", atras.situacion))
+    }
+    if char.control_flags & control_flag.DISABLE_UPDATE && objA0.mapping_offset != 0x344bb8
+    {
+        // Anim length (so the timer doesn't go to invalid frames)
+        atras.anim *= animationSpriteEx == 0x55 || animationSpriteEx == 0x8f ? 2 : 3
+        // Adjust to speed option
+        atras.anim *= atras.vel
+        // Play the animation when pressing the button that's the opposite of where you're looking
+        atras.sprite = char.render_flags & render_flag.FLIP_X ? CONTROL_RIGHT : CONTROL_LEFT
+        if control.pad1.state & atras.sprite && !atras.situacion && atras.anim
+        {
+            if atras.reloj[type] < atras.anim
+                atras.reloj[type] += !atras.flujo && atras.reloj[type] == atras.vel-1 ? atras.vel+1 : 1 // Smoothness option aplies here
+        }
+        else if atras.reloj[type] // In reverse
+            atras.reloj[type] -= !atras.flujo && atras.reloj[type] == atras.vel<<1 ? atras.vel<<1 : 1 // and here too
+        if atras.reloj[type] % atras.vel == 0 && atras.reloj[type]
+        {
+            // Get frame suffix
+            atras.sprite = atras.reloj[type] < atras.anim ? stringformat("_%x", atras.reloj[type]/atras.vel) : ""
+            // Hanging anim option applies here (Richy's H&L moment)
+            atras.anim = animationSpriteEx >= atras.0x91 && animationSpriteEx < 0x93 ? 0x91 : animationSpriteEx
+            // Get character-less sprite key
+            atras.anim = stringformat("%x_behind%s", atras.anim, atras.sprite)
+            atras.sprite = getCharacterSpriteKey(character)
+        #if EXTRA_CHARACTER_FRAMEWORK_ACTIVE
+            if ExChar_num[type]
+	            atras.sprite = getECFCharacterSpriteKey(ExChar_str[type], Character.getSuperState())
+	    #endif
+            // Debugging
+            if System.isDevModeActive()
+                debugLog(stringformat("atras.reloj=%d(/%d=%d), atras.sprite=%s, atras.anim=%s", atras.reloj[type], atras.vel, atras.reloj[type]/atras.vel, atras.sprite, atras.anim))
+            // Get the actual sprite
+            atras.sprite = stringformat("%s_0x%s", atras.sprite, atras.anim)
+            if Renderer.hasCustomSprite(atras.sprite)
+                return atras.sprite // Finally!
+            // More debugging
+            if System.isDevModeActive()
+                debugLog(stringformat("Can't look behind! (invalid, %s)", atras.sprite))
+        }
+    }
+    else
+    {
+        // Clean up
+        atras.reloj[type] = 0
+        atras.situacion = 0
+    }
+    return base.Standalone.getModdedAnimationSpriteKey(character, animationSpriteEx)
+}
+// Knuckles in LBZ2
+//# address-hook(0x06290e) end(0x062926)
+function void fn06290e()
+{
+    base.fn06290e()
+    atras.situacion = 1
+}
+//# address-hook(0x0629a8) end(0x0629ba)
+function void fn0629a8()
+{
+    base.fn0629a8()
+	if (objA0.position.y.u16 >= water.height.current) // RIP Knux
+        atras.situacion = 0
+}
+//# address-hook(0x04af80) end(0x04b088)
+function void fn04af80()
+{
+    atras.situacion = 0
+    if s8[A2] > 0
+        atras.situacion = 1
+    base.fn04af80()
+}
+        
