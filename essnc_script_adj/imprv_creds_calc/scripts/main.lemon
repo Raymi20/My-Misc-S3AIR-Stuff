@@ -2,20 +2,28 @@
 global u32 credits.u32_lines
 global u32 credits.line_count = 2 // Final spacing (assuming the spacing from the credits datagen starts from 1)
 global bool ICC.calc_done
-global u64 ICC.credsTimer
-#if MUSIC_SCRIPTS_ADJUSTED
-// Bypass level timer reset
-function void UpdateGameObjects()
+global u64 ICC.timerDiff
+global u8 ICC.credsAddress[255] // I am NOT taking ANY chances
+//#if MUSIC_SCRIPTS_ADJUSTED
+//// Bypass level timer reset
+//function void UpdateGameObjects()
+//{
+//	if ((global.zone == 0x0d || global.zone_act == 0x0a01) || ICC.credsTimer) && ICC.credsTimer != "stop" && !Outro.isSameMusic()
+//	{
+//		ICC.credsTimer++
+//		if System.isDevModeActive()
+//			debugLog(stringformat("Credits timer: %x", ICC.credsTimer))
+//	}
+//	base.UpdateGameObjects()
+//}
+//#endif
+//# address-hook(0x05dfee) end(0x05e084)
+function void fn05dfee()
 {
-	if ((global.zone == 0x0d || global.zone_act == 0x0a01) || ICC.credsTimer) && ICC.credsTimer != "stop" && !Outro.isSameMusic()
-	{
-		ICC.credsTimer++
-		if System.isDevModeActive()
-			debugLog(stringformat("Credits timer: %x", ICC.credsTimer))
-	}
-	base.UpdateGameObjects()
+	ICC.timerDiff = level.framecounter
+	debugLog(stringformat("ICC.timerDiff=%d", ICC.timerDiff))
+	base.fn05dfee()
 }
-#endif
 function u32 CreditsDataGenerator.build(u8 creditsIndex)
 {
 	// This builds the credits data for S3&K
@@ -36,14 +44,6 @@ function u32 CreditsDataGenerator.build(u8 creditsIndex)
 	u32 backupA1 = A1
 	A0 = startAddress
 	A1 = startAddress + 0x100
-
-	// Add the lines ending with "//!" to your custom credits (if you made ones), otherwise this mod breaks
-#if CREDITS_CALC_IMPROVED	//!
-	if ICC.calc_done		//!
-#endif						//!
-	// Write the signature, so we know if the data was written already
-		u8[A0 + 0xfb] = creditsIndex //? Add indent to this line
-	u32[A0 + 0xfc] = 0xbadc0ffe
 
 	if (creditsIndex == 0)
 	{
@@ -233,14 +233,21 @@ function u32 CreditsDataGenerator.build(u8 creditsIndex)
 		CreditsDataGenerator.addSignal(0xfff4)
 	}
 
+	// Add the lines ending with "//!" to your custom credits (if you made ones) and move this part of the code near the end, otherwise this mod breaks
+#if CREDITS_CALC_IMPROVED	//!
+	if ICC.calc_done		//!
+#endif						//!
+	// Write the signature, so we know if the data was written already
+		u8[A0 + 0xfb] = creditsIndex //? Add indent to this line
+	u32[A0 + 0xfc] = 0xbadc0ffe
+
 	A0 = backupA0
 	A1 = backupA1
 	return startAddress
 }
 function void CreditsDataGenerator.addSignal(u16 signal)
 {
-	if signal == 0xfff4 && !ICC.calc_done
-		ICC.calc_done = true
+	ICC.calc_done = signal == 0xfff4
 	base.CreditsDataGenerator.addSignal(signal)
 }
 function void CreditsDataGenerator.addLine(u8 line, u8 left, u8 color, string text)
@@ -252,58 +259,6 @@ function void CreditsDataGenerator.addLine(u8 line, u8 left, u8 color, string te
 			debugLog(stringformat("credits.line_count=%x", credits.line_count))
 	}
 	base.CreditsDataGenerator.addLine(line, left, color, text)
-}
-//# address-hook(0x05dfee) end(0x05e084)
-function void fn05dfee()
-{
-	objA0.update_address = 0x05e08a
-	objA0.mapping_offset = 0x060486
-	objA0.sprite_attributes = 0x026e
-	objA0.sprite_priority = 0x0380
-	objA0.animation.sprite = 0x01
-	objA0.box_size.x = 0x20
-	objA0.box_size.y = 0x14
-	objA0.render_flags |= render_flag.FLIP_X
-	objA0.position.x.u16 = 0x0220 + getScreenExtend()
-	objA0.position.y.u16 = 0xb0
-	objA0.velocity.x = -0x100 - (getScreenExtend() * 0x40 / 40)		// Faster plane needed
-
-	fn06001e()
-
-	playMusic(MUSIC_CREDITSMEDLEY)
-
-#if STANDALONE
-	// Reset frame counter so we can use it to get the current credits music playback position
-	level.framecounter = 0
-
-	// Start skippable cutscene again, to reset the timer
-	Game.startSkippableCutscene()
-#endif
-
-	// "spawnSimpleChildObjects(0x0601ca)" replaced by:
-	spawnSimpleChildObjects(0x05ecb4, 2)
-
-	// "spawnChildObjects(0x0601d0)" replaced by:
-	spawnChildObject(0x05ebf0, 0x00, 28, 0)
-
-	u8[0xfffffab8] &= ~0x01
-
-	// Spawn the Master Emerald
-	if (allocDynamicObjectStd())
-	{
-		objA1.update_address = 0x05de60
-		u16[A1 + 0x46] = A0.u16
-		objA1.position.x.u16 = 0x0190 + getScreenExtend()
-		objA1.position.y.u16 = 0xdc
-		u8[A1 + 0x2c] = 0xff
-	}
-
-	Kosinski.addToDMAQueue(0x162914, 0x4dc0)	// Smaller ending sprites + Sonic pilot head + chain
-
-#if STANDALONE
-	// Add missing Tornado flame, #contributed by mrgrassman14
-	spawnChildObject(0x05ec3c, 0x00, -10, 12)
-#endif
 }
 //# address-hook(0x05b514) end(0x05b564)
 function void fn05b514()
@@ -352,11 +307,11 @@ function void fn05b514()
 
 #if STANDALONE
 	// Normally the credits data generation happens after the scrolling speed is calculated, but we need to count the lines for the sync to work properly
-	for (u8 i = 0; !ICC.calc_done; i++) // Porque me estoy volviendo tacaño con mis variables otra vez como en el mod de behind you
+	for (u8 p = 0; !ICC.calc_done; p++)
 	{
-		outro.scroll_speed = CreditsDataGenerator.build(i) // A little risky, but gets the job done
+		ICC.credsAddress[p] = CreditsDataGenerator.build(p)
 		if System.isDevModeActive()
-			debugLog(stringformat("Counted lines from page %d", i+1))
+			debugLog(stringformat("Counted lines from page %d", p+1))
 	}
 	credits.u32_lines = Math.roundToInt(credits.line_count*5.3f)
 	if System.isDevModeActive()
@@ -364,8 +319,12 @@ function void fn05b514()
 	// Sync point in credits music (in frames from music start)
 	//  -> This is different for emulated original S&K medley and the longer remastered one featuring also S3 music tracks
 	u32 syncPoint = (Audio.getAudioKeyType(MUSIC_CREDITSMEDLEY) == AudioKeyType.EMULATED) ? 10070 : 11470
-	outro.scroll_speed = CreditsRoll.calculateScrollSpeed(syncPoint, credits.u32_lines)
+	outro.scroll_speed = CreditsRoll.calculateScrollSpeed(syncPoint)
 #endif
+}
+function u32 CreditsRoll.calculateScrollSpeed(u32 syncPoint)
+{
+	return CreditsRoll.calculateScrollSpeed(syncPoint, credits.u32_lines)
 }
 function u32 CreditsRoll.calculateScrollSpeed(u32 creditsEnd, u32 lines)
 {
@@ -374,8 +333,7 @@ function u32 CreditsRoll.calculateScrollSpeed(u32 creditsEnd, u32 lines)
 	u32 creditsStart = global.zone_act == 0x0a01 ? (outro.wait_time - 0x5a) : (level.framecounter + outro.wait_time)
 #if MUSIC_SCRIPTS_ADJUSTED
 	if (Outro.isSameMusic())
-		creditsEnd -= creditsStart + ICC.credsTimer
-	ICC.credsTimer = "stop"
+		creditsEnd -= creditsStart + level.framecounter + ICC.timerDiff
 #endif
 	if global.zone_act == 0x0a01
 	{
@@ -404,7 +362,66 @@ function u32 CreditsRoll.calculateScrollSpeed(u32 creditsEnd, u32 lines)
 	outro.wait_time += error
 	return credits.scroll_speed << 8
 }
-function u32 CreditsRoll.calculateScrollSpeed(u32 syncPoint)
+//# address-hook(0x05b204) end(0x05b282)
+function void fn05b204()
 {
-	return CreditsRoll.calculateScrollSpeed(syncPoint, credits.u32_lines)
+	u16 oldCamPos = camera.position.y >> 16
+	camera.position.y += outro.scroll_speed
+	u16 newCamPos = camera.position.y >> 16
+
+	if ((oldCamPos & 0x0010) != (newCamPos & 0x0010))
+	{
+		// Next line of text
+		D0.u16 = (newCamPos << 4) + 0x0e00
+		D1.u16 = D0.u16 & 0x0f00
+		fn05b2d6()		// Clear VRAM first for the text line
+
+	#if STANDALONE
+		A1 = ICC.credsAddress[u16[0xfffffaae] << 2]
+	#else
+		u32 address = 0x05b284
+		address += u16[0xfffffaae]		// Credits table index (times 4), this is either 0 or 4
+		address += (global.lock_on_state == 0) ? 0 : 8	// S3&K credits has some more entries, especially in the music sections
+		A1 = u32[address]
+	#endif
+
+		// u16[0xfffffa84] is the line index (times 2) of the next text to print
+		u16 lineIndex = u16[0xfffffa84]
+		A1 = tableLookupAddress(A1, lineIndex)
+
+		// D2.u16 encodes:
+		//  - Upper byte: Credits line number when to print the text (empty lines until this is reached)
+		//  - Bits 1..7:  X-position in patterns where to start the text and color
+		//  - Bit 0:      Text color: white or yellow
+		D2.u16 = u16[A1]
+		A1 += 2
+
+		if (D2.u16 == 0xfff8)
+		{
+			// Switch to next credits table
+			//  -> There are two of them, as each is limited to 0x100 lines
+			//  -> It's even three for S3AIR
+			fn05b294()
+		}
+		else if (D2.u16 == 0xfff4)
+		{
+			fn05b29e()
+		}
+		else
+		{
+			// D0.u16 counts up here until reaching D3.u16, producing empty lines in between
+			D0.u16 &= 0xff00
+			D3.u16 = D2.u16 & 0xff00
+			if (D3.u16 == D0.u16)
+			{
+				// Next actual text line
+				D6.u16 = (D2.u16 & 0x0001) ? (sprite_attribute.PRIORITY | sprite_attribute.PALETTE.LINE1 | (ContinueScreen.TextTiles.targetInVRAM >> 5)) : (sprite_attribute.PRIORITY | (ContinueScreen.TextTiles.targetInVRAM >> 5))	// Includes base sprite VRAM address + the palette to use
+				D2.u16 &= 0x0ffe	// This is the start offset from the left side inside plane A
+
+				// Print next characters, read from address A1 (using ASCII encoding)
+				fn05b318()
+				u16[0xfffffa84] += 2
+			}
+		}
+	}
 }

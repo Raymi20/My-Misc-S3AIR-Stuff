@@ -465,9 +465,9 @@ function void Audio.playAudio(u64 sfxId, u8 contextId)
 #endif
 function bool Outro.isSameMusic()
 {
-	bool res = Standalone.getModdedSoundKey(MUSIC_ENDING, MUSIC_ENDING, 0) == Standalone.getModdedSoundKey(MUSIC_CREDITSMEDLEY, MUSIC_CREDITSMEDLEY, 0)
-	debugLog(stringformat("Outro.isSameMusic(): %x", res))
-	return res
+	bool snd = Standalone.getModdedSoundKey(MUSIC_ENDING, MUSIC_ENDING, 0) == Standalone.getModdedSoundKey(MUSIC_CREDITSMEDLEY, MUSIC_CREDITSMEDLEY, 0)
+	debugLog(stringformat("Outro.isSameMusic(): %x", snd))
+	return snd
 }
 // Fadeout + Resume music after countdown
 //# address-hook(0x085b0a) end(0x085b2a)
@@ -510,7 +510,7 @@ function void fn05b1a2()
 function void fn05dfee()
 {
 	if Outro.isSameMusic()
-		MSA.skipSound = "bgm"
+		MSA.skipSound = "!sfx"
 	base.fn05dfee()
 }
 // S&T Outro finish
