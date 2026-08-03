@@ -1,8 +1,8 @@
 #define CREDITS_CALC_IMPROVED = 1
-global u32 credits.u32_lines
 global u32 credits.line_count = 2 // Final spacing (assuming the spacing from the credits datagen starts from 1)
 global bool ICC.calc_done
 global u64 ICC.timerDiff
+global float credits.line_mult = 5.3f
 #if MUSIC_SCRIPTS_ADJUSTED
 function void UpdateGameObjects()
 {
@@ -305,14 +305,14 @@ function void fn05b514()
 
 #if STANDALONE
 	// Normally the credits data generation happens after the scrolling speed is calculated, but we need to count the lines for the sync to work properly
-	for (u8 p = 0; !ICC.calc_done; p++) // Porque me estoy volviendo tacaño con mis variables otra vez como en el mod de behind you
+	for (u8 p = 0; !ICC.calc_done; p++)
 	{
 		outro.scroll_speed = CreditsDataGenerator.build(p) // A little risky, but gets the job done
 		if System.isDevModeActive()
 			debugLog(stringformat("Counted lines from page %d", p+1))
 	}
 	if System.isDevModeActive()
-		debugLog(stringformat("%d*%d=%d", credits.line_count, 5.3f, Math.roundToInt(credits.line_count*5.3f)))
+		debugLog(stringformat("%d*%d=%d", credits.line_count, credits.line_mult, Math.roundToInt(credits.line_count*credits.line_mult)))
 	// Sync point in credits music (in frames from music start)
 	//  -> This is different for emulated original S&K medley and the longer remastered one featuring also S3 music tracks
 	u32 syncPoint = (Audio.getAudioKeyType(MUSIC_CREDITSMEDLEY) == AudioKeyType.EMULATED) ? 10070 : 11470
@@ -321,10 +321,19 @@ function void fn05b514()
 }
 function u32 CreditsRoll.calculateScrollSpeed(u32 syncPoint)
 {
-	return CreditsRoll.calculateScrollSpeed(syncPoint, Math.roundToInt(credits.line_count*5.3f))
+	return CreditsRoll.calculateScrollSpeed(syncPoint, credits.line_count, credits.line_mult)
 }
-function u32 CreditsRoll.calculateScrollSpeed(u32 creditsEnd, u32 lines)
+function u32 CreditsRoll.calculateScrollSpeed(u32 syncPoint, u32 lines)
 {
+	return CreditsRoll.calculateScrollSpeed(syncPoint, lines, credits.line_mult)
+}
+function u32 CreditsRoll.calculateScrollSpeed(u32 syncPoint, float mult)
+{
+	return CreditsRoll.calculateScrollSpeed(syncPoint, credits.line_count, mult)
+}
+function u32 CreditsRoll.calculateScrollSpeed(u32 creditsEnd, u32 lines, float mult)
+{
+	lines = Math.roundToInt(lines*mult)
 	// Credits start and end measured in frames from credits music start
 	//  -> In case of Knuckles' outro, the music will start in 0x5a frames, for the others it has started already
 	u32 creditsStart = global.zone_act == 0x0a01 ? (outro.wait_time - 0x5a) : (level.framecounter + outro.wait_time)
