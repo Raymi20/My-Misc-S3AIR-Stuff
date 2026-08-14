@@ -49,7 +49,7 @@ function u32 CreditsDataGenerator.build(u8 creditsIndex)
 #if CREDITS_CALC_IMPROVED	//? Add these lines up here
 	if ICC.calc_done		//!
 #endif						//!
-	{ //? Indent these lines
+	{ //? Indent these lines and add brackets
 		// First check if the data was written already
 		if (u32[startAddress + 0xfc] == 0xbadc0ffe && u8[startAddress + 0xfb] == creditsIndex)
 			return startAddress
