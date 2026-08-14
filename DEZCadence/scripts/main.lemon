@@ -42,7 +42,7 @@ function void fn072e9e()
 function void fn05806e()
 {
     base.fn05806e()
-    if (!DEZcad.counter)
+    if !DEZcad.counter
         playMusic(MUSIC_DEZ1)
     DEZcad.counter++
 }

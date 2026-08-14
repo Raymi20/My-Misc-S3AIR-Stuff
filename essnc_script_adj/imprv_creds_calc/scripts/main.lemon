@@ -7,7 +7,7 @@ global float credits.line_mult = 5.3f
 function void UpdateGameObjects()
 {
 	if System.isDevModeActive()
-		debugLog(stringformat("Timer: %d, %d", ICC.timerDiff, level.framecounter))
+		debugLog(stringformat("Timer: %d, %d", level.framecounter, ICC.timerDiff))
 	base.UpdateGameObjects()
 }
 //# address-hook(0x05dfee) end(0x05e084)
@@ -15,6 +15,20 @@ function void fn05dfee()
 {
 	ICC.timerDiff = level.framecounter
 	base.fn05dfee()
+}
+//# address-hook(0x05e80a) end(0x05e830)
+function void fn05e80a()
+{
+	base.fn05e80a()
+	if (objA0.countdown_value < 0)
+		ICC.timerDiff = level.framecounter
+}
+//# address-hook(0x085b44) end(0x085b5a)
+function void fn085b44()
+{
+	if global.zone_act == 0x0a01
+		ICC.timerDiff = level.framecounter - ICC.timerDiff
+	base.fn085b44()
 }
 #endif
 function u32 CreditsDataGenerator.build(u8 creditsIndex)
@@ -339,7 +353,7 @@ function u32 CreditsRoll.calculateScrollSpeed(u32 creditsEnd, u32 lines, float m
 	u32 creditsStart = global.zone_act == 0x0a01 ? (outro.wait_time - 0x5a) : (level.framecounter + outro.wait_time)
 #if MUSIC_SCRIPTS_ADJUSTED
 	if (Outro.isSameMusic())
-		creditsEnd -= creditsStart + level.framecounter + ICC.timerDiff
+		creditsEnd -= ICC.timerDiff
 #endif
 	if global.zone_act == 0x0a01
 	{

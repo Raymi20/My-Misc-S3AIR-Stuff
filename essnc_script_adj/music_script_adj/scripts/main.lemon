@@ -1,6 +1,28 @@
 //global bool intro.knux_musicId
 global u64 MSA.skipSound // 2 for only stop next fadeout, 6 for stop whatever's the next one
 #define MUSIC_SCRIPTS_ADJUSTED = true
+function void Standalone.playAudio(u8 sfxId)
+{
+	// Choose whether it's music, a jingle, or a sound effect
+	u8 soundRegType = MSA.setupSoundRegType(sfxId)
+	u64 soundKey = MSA.setupSoundKey(Standalone.getModdedSoundKey(sfxId, sfxId, soundRegType), sfxId, soundRegType)
+	// Ask modded scripts if they want to change the sound reg type as well
+	soundRegType = Standalone.getModdedSoundRegType(soundKey, sfxId, soundRegType)
+	if System.isDevModeActive()
+	{
+		debugLog(stringformat("Standalone.playAudio: sfxId=0x%02x, soundRegType=%x", sfxId, soundRegType))
+		if soundKey != sfxId
+			debugLog(stringformat("Standalone.playAudio: (mod) moddedSoundKey=%s", soundKey))
+		debugLog(stringformat("Standalone.playAudio: (raw) moddedSoundKey=%s", soundKey))
+	}
+
+	Standalone.playRumbleEffectForAudio(sfxId)
+	
+	if (MSA.extraAudioHandling(soundKey, sfxId, soundRegType))
+		return
+	u8 audioContext = (soundRegType != SoundRegType.TYPE_SOUND) ? AudioContext.CONTEXT_MUSIC : AudioContext.CONTEXT_SOUND
+	Audio.playAudio(soundKey, audioContext)
+}
 function u8 MSA.setupSoundRegType(u8 sfxId)
 {
 	if (sfxId <= 0x24)
@@ -291,28 +313,6 @@ function u64 MSA.setupSoundKey(u64 soundKey, u8 sfxId, u8 soundRegType)
 	}
 	return soundKey
 }
-function void Standalone.playAudio(u8 sfxId)
-{
-	// Choose whether it's music, a jingle, or a sound effect
-	u8 soundRegType = MSA.setupSoundRegType(sfxId)
-	u64 soundKey = MSA.setupSoundKey(Standalone.getModdedSoundKey(sfxId, sfxId, soundRegType), sfxId, soundRegType)
-	// Ask modded scripts if they want to change the sound reg type as well
-	soundRegType = Standalone.getModdedSoundRegType(soundKey, sfxId, soundRegType)
-	if System.isDevModeActive()
-	{
-		debugLog(stringformat("Standalone.playAudio: sfxId=0x%02x, soundRegType=%x", sfxId, soundRegType))
-		if soundKey != sfxId
-			debugLog(stringformat("Standalone.playAudio: (mod) moddedSoundKey=%s", soundKey))
-		debugLog(stringformat("Standalone.playAudio: (raw) moddedSoundKey=%s", soundKey))
-	}
-
-	Standalone.playRumbleEffectForAudio(sfxId)
-	
-	if (MSA.extraAudioHandling(soundKey, sfxId, soundRegType))
-		return
-	u8 audioContext = (soundRegType != SoundRegType.TYPE_SOUND) ? AudioContext.CONTEXT_MUSIC : AudioContext.CONTEXT_SOUND
-		Audio.playAudio(soundKey, audioContext)
-}
 function bool MSA.extraAudioHandling(u64 soundKey, u8 sfxId, u8 soundRegType)
 {
 	if System.isDevModeActive()
@@ -347,7 +347,7 @@ function bool MSA.extraAudioHandling(u64 soundKey, u8 sfxId, u8 soundRegType)
 		// Just ignore these
 		return true
 	}
-	else if (soundRegType == SoundRegType.TYPE_MUSIC)
+	else if (soundRegType == SoundRegType.TYPE_MUSIC)||(soundRegType != SoundRegType.TYPE_SOUND && (sfxId == MUSIC_ENDING || sfxId == MUSIC_CREDITSMEDLEY))
 	{
 		if (Audio.isPlayingAudio(soundKey))
 		{
@@ -408,9 +408,7 @@ function void Game.openOptionsMenu()
 			Audio.playOverride(Standalone.getModdedSoundKey(MUSIC_DATASELECT, MUSIC_DATASELECT, 0), 0x10, 4, 0)
 		}
 		if Audio.isPlayingAudio(MUSIC_DATASELECT)
-		{
 			Audio.pauseChannel(0)
-		}
 	}
 	else
 		Audio.stopChannel(4)
@@ -458,7 +456,7 @@ function void Audio.playAudio(u64 sfxId, u8 contextId)
 	if System.isDevModeActive()
 		debugLog(stringformat("Audio.playAudio(sfxId=%s(%x), contextId=%x)",sfxId, sfxId, contextId))
 	// Euka, why did you make me do this
-	if sfxId == "1f" && contextId == AudioContext.CONTEXT_MUSIC && Game.getSetting(SETTING_AIZ_INTRO_KNUCKLES) != 0 && global.zone_act == 0x0000 && isMainCharacter(CHARACTER_KNUCKLES) && checkpoint.number == 0 && !Game.isTimeAttack()
+	if sfxId == "1f" && contextId == AudioContext.CONTEXT_MUSIC && Game.getSetting(SETTING_AIZ_INTRO_KNUCKLES) != 0 && global.zone_act == 0x0000 && isMainCharacter(CHARACTER_KNUCKLES) && checkpoint.number == 0 // && !Game.isTimeAttack() Yeah IF ONLY EUKA WOULD LET ME
 		sfxId = Standalone.getModdedSoundKey(sfxId, 0x1f, 0)
 	base.Audio.playAudio(sfxId, contextId)
 }
@@ -466,7 +464,8 @@ function void Audio.playAudio(u64 sfxId, u8 contextId)
 function bool Outro.isSameMusic()
 {
 	bool snd = Standalone.getModdedSoundKey(MUSIC_ENDING, MUSIC_ENDING, 0) == Standalone.getModdedSoundKey(MUSIC_CREDITSMEDLEY, MUSIC_CREDITSMEDLEY, 0)
-	debugLog(stringformat("Outro.isSameMusic(): %x", snd))
+	if System.isDevModeActive()
+		debugLog(stringformat("Outro.isSameMusic(): %x", snd))
 	return snd
 }
 // Fadeout + Resume music after countdown
@@ -496,6 +495,19 @@ function void fn085b30()
 		return
 	}
 	base.fn085b30()
+}
+function void MSA.ChangeMusicAfterCountdown(u8 countdown)
+{
+	if System.isDevModeActive()
+		debugLog(stringformat("MSA.ChangeMusicAfterCountdown(): MSA.skipSound=%x",MSA.skipSound))
+	if MSA.skipSound == "MSA.CMACD"
+	{
+		MSA.skipSound = 0
+		UnloadObject()
+		return
+	}
+	objA0.countdown_value = countdown
+	fn085b44()
 }
 // S&T Outro init
 //# address-hook(0x05b1a2) end(0x05b1e6)
