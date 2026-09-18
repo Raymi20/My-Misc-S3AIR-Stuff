@@ -3,7 +3,7 @@ global u64 MSA.skipSound // 2 for only stop next fadeout, 6 for stop whatever's 
 #define MUSIC_SCRIPTS_ADJUSTED = true
 function void Standalone.playAudio(u8 sfxId)
 {
-	// Choose whether it's music, a jingle, or a sound effect
+	// Determine whether it's music, a jingle, or a sound effect
 	u8 soundRegType = MSA.setupSoundRegType(sfxId)
 	u64 soundKey = MSA.setupSoundKey(Standalone.getModdedSoundKey(sfxId, sfxId, soundRegType), sfxId, soundRegType)
 	// Ask modded scripts if they want to change the sound reg type as well
@@ -319,12 +319,12 @@ function bool MSA.extraAudioHandling(u64 soundKey, u8 sfxId, u8 soundRegType)
 		debugLog(stringformat("Standalone.playAudio(sfxId): MSA.skipSound=%x(%s)",MSA.skipSound, MSA.skipSound))
 	if soundRegType == SoundRegType.TYPE_MUSIC && ((Audio.isPlayingAudio(soundKey) && sfxId == MUSIC_DATASELECT) || global.game_mode != 0x1c)
 		Audio.stopChannel(4)
-	if MSA.skipSound == sfxId || MSA.skipSound == "any" || (MSA.skipSound == "bgm" && soundRegType == SoundRegType.TYPE_MUSIC) || (MSA.skipSound == "sfx" && soundRegType == SoundRegType.TYPE_SOUND) || (MSA.skipSound == "!sfx" && soundRegType != SoundRegType.TYPE_SOUND) || (MSA.skipSound == "jgl" && soundRegType == SoundRegType.TYPE_JINGLE)
+	if MSA.skipSound == sfxId || MSA.skipSound == "any" || (MSA.skipSound == "bgm" && soundRegType == SoundRegType.TYPE_MUSIC) || (MSA.skipSound == "sfx" && soundRegType == SoundRegType.TYPE_SOUND) || (MSA.skipSound == "!sfx" && soundRegType != SoundRegType.TYPE_SOUND) || (MSA.skipSound == "jng" && soundRegType == SoundRegType.TYPE_JINGLE)
 	{
 		MSA.skipSound = 0
 		return true
 	}
-	if (soundKey == "" || soundKey == 0)
+	if soundKey == "" || soundKey == 0
 		return true
 	// Clear music for level results, emerald jingle, drowning music and outro music
 	if (sfxId == MUSIC_LEVELCLEAR || sfxId == MUSIC_CHAOSEMERALD || sfxId == MUSIC_DROWNING || sfxId == MUSIC_CREDITSMEDLEY)
@@ -457,7 +457,7 @@ function void Audio.playAudio(u64 sfxId, u8 contextId)
 		debugLog(stringformat("Audio.playAudio(sfxId=%s(%x), contextId=%x)",sfxId, sfxId, contextId))
 	// Euka, why did you make me do this
 	if sfxId == "1f" && contextId == AudioContext.CONTEXT_MUSIC && Game.getSetting(SETTING_AIZ_INTRO_KNUCKLES) != 0 && global.zone_act == 0x0000 && isMainCharacter(CHARACTER_KNUCKLES) && checkpoint.number == 0 // && !Game.isTimeAttack() Yeah IF ONLY EUKA WOULD LET ME
-		sfxId = Standalone.getModdedSoundKey(sfxId, 0x1f, 0)
+		sfxId = Standalone.getModdedSoundKey(sfxId, 0x1f, contextId)
 	base.Audio.playAudio(sfxId, contextId)
 }
 #endif
@@ -468,7 +468,7 @@ function bool Outro.isSameMusic()
 		debugLog(stringformat("Outro.isSameMusic(): %x", snd))
 	return snd
 }
-// Fadeout + Resume music after countdown
+// Fadeout + Resume music after set countdown
 //# address-hook(0x085b0a) end(0x085b2a)
 function void fn085b0a()
 {
@@ -533,7 +533,7 @@ function void fn05de36()
 		MSA.skipSound = MUSIC_CTRL_FADEOUT
 	base.fn05de36()
 }
-// S&T Outro Credits
+// S&T Credits Roll
 //# address-hook(0x05e1c2) end(0x05e282)
 function void fn05e1c2()
 {

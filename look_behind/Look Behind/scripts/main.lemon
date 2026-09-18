@@ -3,17 +3,17 @@ global u8 atras.situacion
 global u16 atras.0x91
 global u8 atras.vel
 global bool atras.flujo
-constant array<u16> LOOK_BEHIND.VALID = {0xba, 0x55, 0x8f, 0x90, 0x91, 0x92}
+constant array<u16> LOOK_BEHIND.VALID = {0x55, 0x8f, 0x90, 0x91, 0x92, 0xba}
 function u64 Standalone.getModdedAnimationSpriteKey(u8 character, u16 animationSpriteEx)
 {
     // Index to use with the timer so the sidekick won't break the anim (is it even possible to get to 2?)
     u8 type = A0 == 0xffffb000 ? 0 : (A0 == 0xffffb04a ? 1 : 2)
-    // Thx retroscriptv3 for teaching me the dark arts of variable recycling <3
+    // Thx retroscript v3 for teaching me the dark arts of variable recycling <3
     u64 atras.anim
-    u64 atras.sprite
+    u64 atras.frame
     // Check if current anim is valid to look behind
-    for (;atras.sprite < LOOK_BEHIND.VALID.length() && !atras.anim; atras.sprite++) // Ni para el for loop hago una variable más
-        atras.anim = animationSpriteEx == LOOK_BEHIND.VALID[atras.sprite]
+    for (;atras.frame < LOOK_BEHIND.VALID.length() && !atras.anim; atras.frame++) // Ni para el for loop hago una variable más
+        atras.anim = animationSpriteEx == LOOK_BEHIND.VALID[atras.frame]
     // Debugging
     if System.isDevModeActive() && objA0.mapping_offset != 0x344bb8
     {
@@ -27,8 +27,8 @@ function u64 Standalone.getModdedAnimationSpriteKey(u8 character, u16 animationS
         // Adjust to speed option
         atras.anim *= atras.vel
         // Play the animation when pressing the button that's the opposite of where you're looking
-        atras.sprite = char.render_flags & render_flag.FLIP_X ? CONTROL_RIGHT : CONTROL_LEFT
-        if control.pad1.state & atras.sprite && !atras.situacion && atras.anim
+        atras.frame = char.render_flags & render_flag.FLIP_X ? CONTROL_RIGHT : CONTROL_LEFT
+        if control.pad1.state & atras.frame && !atras.situacion && (!Game.isInSkippableCutscene() || global.zone_act == 0x0601) && atras.anim
         {
             if atras.reloj[type] < atras.anim
                 atras.reloj[type] += !atras.flujo && atras.reloj[type] == atras.vel-1 ? atras.vel+1 : 1 // Smoothness option aplies here
@@ -38,26 +38,26 @@ function u64 Standalone.getModdedAnimationSpriteKey(u8 character, u16 animationS
         if atras.reloj[type] % atras.vel == 0 && atras.reloj[type]
         {
             // Get frame suffix
-            atras.sprite = atras.reloj[type] < atras.anim ? stringformat("_%x", atras.reloj[type]/atras.vel) : ""
+            atras.frame = atras.reloj[type] < atras.anim ? stringformat("_%x", atras.reloj[type]/atras.vel) : ""
             // Hanging anim option applies here (Richy's H&L moment)
             atras.anim = animationSpriteEx >= atras.0x91 && animationSpriteEx < 0x93 ? 0x91 : animationSpriteEx
             // Get character-less sprite key
-            atras.anim = stringformat("%x_behind%s", atras.anim, atras.sprite)
-            atras.sprite = getCharacterSpriteKey(character)
+            atras.anim = stringformat("%x_behind%s", atras.anim, atras.frame)
+            atras.frame = getCharacterSpriteKey(character)
         #if EXTRA_CHARACTER_FRAMEWORK_ACTIVE
             if ExChar_num[type]
-	            atras.sprite = getECFCharacterSpriteKey(ExChar_str[type], Character.getSuperState())
+	            atras.frame = getECFCharacterSpriteKey(ExChar_str[type], Character.getSuperState())
 	    #endif
             // Debugging
             if System.isDevModeActive()
-                debugLog(stringformat("atras.reloj=%d(/%d=%d), atras.sprite=%s, atras.anim=%s", atras.reloj[type], atras.vel, atras.reloj[type]/atras.vel, atras.sprite, atras.anim))
+                debugLog(stringformat("atras.reloj=%d(/%d=%d), atras.frame=%s, atras.anim=%s", atras.reloj[type], atras.vel, atras.reloj[type]/atras.vel, atras.frame, atras.anim))
             // Get the actual sprite
-            atras.sprite = stringformat("%s_0x%s", atras.sprite, atras.anim)
-            if Renderer.hasCustomSprite(atras.sprite)
-                return atras.sprite // Finally!
+            atras.frame = stringformat("%s_0x%s", atras.frame, atras.anim)
+            if Renderer.hasCustomSprite(atras.frame)
+                return atras.frame // Finally!
             // More debugging
             if System.isDevModeActive()
-                debugLog(stringformat("Can't look behind! (invalid, %s)", atras.sprite))
+                debugLog(stringformat("Can't look behind! (invalid, %s)", atras.frame))
         }
     }
     else
@@ -79,15 +79,6 @@ function void fn06290e()
 function void fn0629a8()
 {
     base.fn0629a8()
-	if (objA0.position.y.u16 >= water.height.current) // RIP Knux
+	if objA0.position.y.u16 >= water.height.current // RIP Knux
         atras.situacion = 0
 }
-//# address-hook(0x04af80) end(0x04b088)
-function void fn04af80()
-{
-    atras.situacion = 0
-    if s8[A2] > 0
-        atras.situacion = 1
-    base.fn04af80()
-}
-        

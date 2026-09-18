@@ -2,7 +2,7 @@
     "Metadata": {
         "Name": "Improved Credits Calculation",
         "UniqueID": "creds_calc",
-        "Description": "Makes the Credits Roll sync point calculation into its own function and auto calculates the value of u32_lines",
+        "Description": "Makes the Credits Roll sync point calculation into its own function and auto calculates the value of u32 lines",
         "Version": "1.0",
         "Author": "SKR20!"
     },

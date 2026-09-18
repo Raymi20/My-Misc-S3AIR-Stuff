@@ -1,8 +1,8 @@
 #define CREDITS_CALC_IMPROVED = 1
 global u32 credits.line_count = 2 // Final spacing (assuming the spacing from the credits datagen starts from 1)
-global bool ICC.calc_done
+global float credits.line_mult = 5.3f // Multiplier (assuming the above)
 global u64 ICC.timerDiff
-global float credits.line_mult = 5.3f
+global bool ICC.calc_done
 #if MUSIC_SCRIPTS_ADJUSTED
 function void UpdateGameObjects()
 {
@@ -357,9 +357,9 @@ function u32 CreditsRoll.calculateScrollSpeed(u32 creditsEnd, u32 lines, float m
 #endif
 	if global.zone_act == 0x0a01
 	{
-		creditsEnd -= (outro.ending_type == -2) ? 0x248 : 0
+		creditsEnd -= (outro.ending_type < 2) ? 0x248 : 0
 	}
-	else if (isMainCharacter(CHARACTER_SONIC) && outro.ending_type >= 0)
+	else if (isMainCharacter(CHARACTER_SONIC) && outro.ending_type > -2)
 	{
 		creditsEnd -= 0xda
 	}
